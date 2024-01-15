@@ -1,0 +1,6 @@
+azure_login = {
+    "client_id": "921545fe-c80b-4418-8150-c729c2e4dc4f",
+    "redirect_url": "https://127.0.0.1/auth-response",
+    "secret_value": "None",
+    "version": "1.19"
+}
