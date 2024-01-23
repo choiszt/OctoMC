@@ -3,12 +3,12 @@ from voyager.utils.json_utils import fix_and_parse_json
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 
-import os
+# import os
 import openai
-openai.api_type = "azure"
-openai.api_base = "https://voyager.openai.azure.com/"
-openai.api_version = "2023-07-01-preview"
-openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
+# openai.api_type = "azure"
+# openai.api_base = "https://voyager.openai.azure.com/"
+# openai.api_version = "2023-07-01-preview"
+# openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
 class Octopus_CriticAgent:
     def __init__(
         self,

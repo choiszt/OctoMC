@@ -13,10 +13,10 @@ from voyager.control_primitives_context import load_control_primitives_context
 
 import os
 import openai
-openai.api_type = "azure"
-openai.api_base = "https://voyager.openai.azure.com/"
-openai.api_version = "2023-07-01-preview"
-openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
+# openai.api_type = "azure"
+# openai.api_base = "https://voyager.openai.azure.com/"
+# openai.api_version = "2023-07-01-preview"
+# openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
 
 # def gpt_request(content):
     

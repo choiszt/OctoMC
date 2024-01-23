@@ -1,14 +1,18 @@
 const mineflayer = require('mineflayer')
 const mineflayerViewer = require('prismarine-viewer').mineflayer
 
+const { pathfinder, Movements } = require('mineflayer-pathfinder')
+const { GoalXZ } = require('mineflayer-pathfinder').goals
+
 const bot = mineflayer.createBot({
   username: 'Bot'
 })
 
-bot.once('spawn', () => {
-  mineflayerViewer(bot, { port: 3000 }) // Start the viewing server on port 3000
+bot.loadPlugin(pathfinder)
 
-  // Draw the path followed by the bot
+bot.once('spawn', () => {
+  mineflayerViewer(bot, { firstPerson: true, port: 45521 })
+
   const path = [bot.entity.position.clone()]
   bot.on('move', () => {
     if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
@@ -16,4 +20,9 @@ bot.once('spawn', () => {
       bot.viewer.drawLine('path', path)
     }
   })
+
+  const mcData = require('minecraft-data')(bot.version)
+  const defaultMove = new Movements(bot, mcData)
+  bot.pathfinder.setMovements(defaultMove)
+  bot.pathfinder.setGoal(new GoalXZ(1000, 0))
 })

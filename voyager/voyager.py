@@ -24,12 +24,12 @@ class Voyager:
         env_request_timeout: int = 600,
         max_iterations: int = 160,
         reset_placed_if_failed: bool = False,
-        action_agent_model_name: str = "gpt-4",
+        action_agent_model_name: str = "gpt-3.5-turbo",
         action_agent_temperature: float = 0,
         action_agent_task_max_retries: int = 4,
         action_agent_show_chat_log: bool = True,
         action_agent_show_execution_error: bool = True,
-        curriculum_agent_model_name: str = "gpt-4",
+        curriculum_agent_model_name: str = "gpt-3.5-turbo",
         curriculum_agent_temperature: float = 0,
         curriculum_agent_qa_model_name: str = "gpt-3.5-turbo",
         curriculum_agent_qa_temperature: float = 0,
@@ -37,7 +37,7 @@ class Voyager:
         curriculum_agent_core_inventory_items: str = r".*_log|.*_planks|stick|crafting_table|furnace"
         r"|cobblestone|dirt|coal|.*_pickaxe|.*_sword|.*_axe",
         curriculum_agent_mode: str = "auto",
-        critic_agent_model_name: str = "gpt-4",
+        critic_agent_model_name: str = "gpt-3.5-turbo",
         critic_agent_temperature: float = 0,
         critic_agent_mode: str = "auto",
         skill_manager_model_name: str = "gpt-3.5-turbo",
@@ -114,7 +114,7 @@ class Voyager:
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
         # init agents
-        self.action_agent = OctopusAgent(
+        self.action_agent = ActionAgent(
             model_name=action_agent_model_name,
             temperature=action_agent_temperature,
             request_timout=openai_api_request_timeout,
@@ -124,7 +124,7 @@ class Voyager:
             execution_error=action_agent_show_execution_error,
         )
         self.action_agent_task_max_retries = action_agent_task_max_retries
-        self.curriculum_agent = Octopus_CurriculumAgent(
+        self.curriculum_agent = CurriculumAgent(
             model_name=curriculum_agent_model_name,
             temperature=curriculum_agent_temperature,
             qa_model_name=curriculum_agent_qa_model_name,
@@ -136,13 +136,13 @@ class Voyager:
             warm_up=curriculum_agent_warm_up,
             core_inventory_items=curriculum_agent_core_inventory_items,
         )
-        self.critic_agent = Octopus_CriticAgent(
+        self.critic_agent = CriticAgent(
             model_name=critic_agent_model_name,
             temperature=critic_agent_temperature,
             request_timout=openai_api_request_timeout,
             mode=critic_agent_mode,
         )
-        self.skill_manager = Octopus_SkillManager(
+        self.skill_manager = SkillManager(
             model_name=skill_manager_model_name,
             temperature=skill_manager_temperature,
             retrieval_top_k=skill_manager_retrieval_top_k,
@@ -202,8 +202,16 @@ class Voyager:
     def step(self):
         if self.action_agent_rollout_num_iter < 0:
             raise ValueError("Agent must be reset before stepping")
-        all_message=self.messages[0].content+self.messages[1].content
-        ai_message = self.action_agent.gpt_request(all_message)
+        # all_message=self.messages[0].content+self.messages[1].content
+        # ai_message = self.action_agent.gpt_request(all_message)
+
+        # ai_message = self.action_agent.llm(self.messages)
+
+        from langchain.schema import AIMessage, HumanMessage, SystemMessage
+        with open("1.txt",'r')as f:
+            data=f.read()
+            ai_message=AIMessage(content=data)
+            
         print(f"\033[34m****Action Agent ai message****\n{ai_message.content}\033[0m")
         self.conversations.append(
             (self.messages[0].content, self.messages[1].content, ai_message.content)
