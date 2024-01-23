@@ -3,7 +3,7 @@ import pyautogui
 
 # 等待一些时间以确保切换到Minecraft窗口
 def change_to_bot():
-    time.sleep(2)
+    time.sleep(0.5)
 
     # 发送按键 "t" 打开聊天框
     pyautogui.press('t')
@@ -15,7 +15,7 @@ def change_to_bot():
     # 发送/spectate bot命令
     command = "/spectate bot"
     pyautogui.write(command)
-    time.sleep(2)
+    time.sleep(1)
     pyautogui.press('enter')
 def capture():
     time.sleep

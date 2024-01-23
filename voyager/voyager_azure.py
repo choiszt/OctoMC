@@ -10,6 +10,7 @@ from .agents import ActionAgent,OctopusAgent
 from .agents import CriticAgent,Octopus_CriticAgent
 from .agents import CurriculumAgent,Octopus_CurriculumAgent
 from .agents import SkillManager,Octopus_SkillManager
+from .agents.choiszt_keyboard import *
 # from .agents.azure_query import gpt_request
 
 # TODO: remove event memory
@@ -172,6 +173,8 @@ class Voyager:
                     "wait_ticks": self.env_wait_ticks,
                 }
             )
+            # change_gamemode("spectator")
+            change_to_bot()
         difficulty = (
             "easy" if len(self.curriculum_agent.completed_tasks) > 15 else "peaceful"
         )
@@ -310,6 +313,8 @@ class Voyager:
                 }
             )
             self.resume = True
+        # change_gamemode("spectator")
+        change_to_bot()
         self.last_events = self.env.step("")
 
         while True:
@@ -346,6 +351,8 @@ class Voyager:
                         "position": self.last_events[-1][1]["status"]["position"],
                     }
                 )
+                # change_gamemode("spectator")
+                change_to_bot()
                 # use red color background to print the error
                 print("Your last round rollout terminated due to error:")
                 print(f"\033[41m{e}\033[0m")
@@ -375,6 +382,8 @@ class Voyager:
                     "wait_ticks": self.env_wait_ticks,
                 }
             )
+            # change_gamemode("spectator")
+            change_to_bot()
         return self.curriculum_agent.decompose_task(task, self.last_events)
 
     def inference(self, task=None, sub_goals=[], reset_mode="hard", reset_env=True):
@@ -388,6 +397,8 @@ class Voyager:
                 "wait_ticks": self.env_wait_ticks,
             }
         )
+        # change_gamemode("spectator")
+        change_to_bot()
         self.curriculum_agent.completed_tasks = []
         self.curriculum_agent.failed_tasks = []
         self.last_events = self.env.step("")

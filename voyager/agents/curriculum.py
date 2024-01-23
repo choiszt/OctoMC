@@ -13,10 +13,11 @@ from langchain.vectorstores import Chroma
 
 # import os
 import openai
+import chromadb
 # openai.api_type = "azure"
 # openai.api_base = "https://voyager.openai.azure.com/"
 # openai.api_version = "2023-07-01-preview"
-# openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
+# openai.api_key = "xxxx"
 
 class Octopus_CurriculumAgent:
     def __init__(
@@ -61,20 +62,25 @@ class Octopus_CurriculumAgent:
             self.failed_tasks = []
             self.qa_cache = {}
         # vectordb for qa cache
-        self.qa_cache_questions_vectordb = Chroma(
-            collection_name="qa_cache_questions_vectordb",
-            embedding_function=OpenAIEmbeddings(),
-            persist_directory=f"{ckpt_dir}/curriculum/vectordb",
-        )
-        assert self.qa_cache_questions_vectordb._collection.count() == len(
-            self.qa_cache
-        ), (
-            f"Curriculum Agent's qa cache question vectordb is not synced with qa_cache.json.\n"
-            f"There are {self.qa_cache_questions_vectordb._collection.count()} questions in vectordb "
-            f"but {len(self.qa_cache)} questions in qa_cache.json.\n"
-            f"Did you set resume=False when initializing the agent?\n"
-            f"You may need to manually delete the qa cache question vectordb directory for running from scratch.\n"
-        )
+        self.client = chromadb.PersistentClient(path=f"{ckpt_dir}/curriculum/vectordb")
+        try:
+            self.collection = self.client.create_collection(name="qa_cache_questions_vectordb") #if exist
+        except:
+            self.collection=self.client.get_collection("qa_cache_questions_vectordb")
+        # self.qa_cache_questions_vectordb = Chroma(
+        #     collection_name="qa_cache_questions_vectordb",
+        #     embedding_function=OpenAIEmbeddings(),
+        #     persist_directory=f"{ckpt_dir}/curriculum/vectordb",
+        # )
+        # assert self.qa_cache_questions_vectordb._collection.count() == len(
+        #     self.qa_cache
+        # ), (
+        #     f"Curriculum Agent's qa cache question vectordb is not synced with qa_cache.json.\n"
+        #     f"There are {self.qa_cache_questions_vectordb._collection.count()} questions in vectordb "
+        #     f"but {len(self.qa_cache)} questions in qa_cache.json.\n"
+        #     f"Did you set resume=False when initializing the agent?\n"
+        #     f"You may need to manually delete the qa cache question vectordb directory for running from scratch.\n"
+        # )
         # if warm up not defined, initialize it as a dict, else, initialize all the missing value as a default value
         if not warm_up:
             warm_up = self.default_warmup
@@ -414,10 +420,10 @@ class Octopus_CurriculumAgent:
         questions = []
         answers = []
         for question in questions_new:
-            if self.qa_cache_questions_vectordb._collection.count() > 0:
+            if self.collection.count() > 0:
                 docs_and_scores = (
-                    self.qa_cache_questions_vectordb.similarity_search_with_score(
-                        question, k=1
+                    self.collection.query(
+                        query_texts=question, n_results=1
                     )
                 )
                 if docs_and_scores and docs_and_scores[0][1] < 0.05:
@@ -430,11 +436,11 @@ class Octopus_CurriculumAgent:
             answer = self.run_qa_step2_answer_questions(question=question)
             assert question not in self.qa_cache
             self.qa_cache[question] = answer
-            self.qa_cache_questions_vectordb.add_texts(
-                texts=[question],
+            self.collection.add(
+                documents=[question],
             )
             U.dump_json(self.qa_cache, f"{self.ckpt_dir}/curriculum/qa_cache.json")
-            self.qa_cache_questions_vectordb.persist()
+            # self.qa_cache_questions_vectordb.persist()
             questions.append(question)
             answers.append(answer)
         assert len(questions_new) == len(questions) == len(answers)
@@ -451,11 +457,11 @@ class Octopus_CurriculumAgent:
         else:
             answer = self.run_qa_step2_answer_questions(question=question)
             self.qa_cache[question] = answer
-            self.qa_cache_questions_vectordb.add_texts(
-                texts=[question],
+            self.collection.add(
+                documents=[question],
             )
             U.dump_json(self.qa_cache, f"{self.ckpt_dir}/curriculum/qa_cache.json")
-            self.qa_cache_questions_vectordb.persist()
+            # self.qa_cache_questions_vectordb.persist()
         context = f"Question: {question}\n{answer}"
         return context
 

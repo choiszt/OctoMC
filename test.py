@@ -1,9 +1,5 @@
 import os
 
-os.environ["OPENAI_API_TYPE"] = "azure"
-os.environ["OPENAI_API_BASE"] = "https://voyager.openai.azure.com/"
-os.environ["OPENAI_API_KEY"] = "5ea4d624a50a495d9c532bda3665d3de"
-os.environ["OPENAI_API_VERSION"] = "2023-07-01-preview"
 
 from langchain.embeddings.openai import OpenAIEmbeddings
 embeddings = OpenAIEmbeddings(
