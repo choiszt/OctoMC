@@ -1,3 +1,0 @@
-async function craftWoodenPickaxe(bot) {
-    // The function is about crafting a wooden pickaxe if it is not already available in the bot's inventory. First, it checks if the bot already has a wooden pickaxe, and if so, it returns. If not, it checks if the bot has enough wooden planks and sticks to craft a wooden pickaxe. If not, it collects more wooden planks and crafts the necessary materials. Then, it finds a nearby crafting table and checks if one was found. If not, it returns. Finally, it crafts a wooden pickaxe using the crafting table and notifies that it has successfully crafted a wooden pickaxe.
-}

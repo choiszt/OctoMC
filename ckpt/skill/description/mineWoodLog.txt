@@ -1,3 +1,3 @@
 async function mineWoodLog(bot) {
-    // The function is about mining a wood log block. First, it checks if there is any wood log in the inventory. If there is, it returns. If not, it explores the environment until it finds a wood log block nearby. Once a wood log block is found, it mines it. After mining, it checks if the wood log was successfully mined. If it was, it sends a message saying it successfully mined a wood log.
+    // The function is about mining a specific type of wood log. First, it explores the environment until finding the specified wood log within a maximum distance of 32 blocks. If no wood log is found, it sends a chat message and exits the function. If a wood log is found, it mines one block of the wood log. Then, it checks if the wood log is successfully mined and sends the corresponding chat message. If the wood log is not successfully mined, it sends a chat message and recursively calls the function again.
 }

@@ -438,6 +438,7 @@ class Octopus_CurriculumAgent:
             self.qa_cache[question] = answer
             self.collection.add(
                 documents=[question],
+                ids=["choiszt"]
             )
             U.dump_json(self.qa_cache, f"{self.ckpt_dir}/curriculum/qa_cache.json")
             # self.qa_cache_questions_vectordb.persist()

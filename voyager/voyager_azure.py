@@ -219,6 +219,7 @@ class Voyager:
                 code,
                 programs=self.skill_manager.programs,
             )
+            capture() #choiszt capture
             self.recorder.record(events, self.task)
             self.action_agent.update_chest_memory(events[-1][1]["nearbyChests"])
             success, critique = self.critic_agent.check_task_success(
