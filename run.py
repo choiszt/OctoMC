@@ -12,9 +12,10 @@ azure_login = {
 from voyager.agents.choiszt_keyboard import change_gamemode
 change_gamemode("spectator")
 voyager = Voyager(
-    mc_port=44039,
+    mc_port=36581,
     openai_api_key=openai.api_key,
 )
 
 # start lifelong learning
-voyager.learn()
+voyager.capture()
+
