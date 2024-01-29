@@ -321,10 +321,23 @@ class Voyager:
         bot_keyboard.initial(send,self.skill_manager.programs)
         change_to_bot()
         bot_keyboard.rotate(send,self.skill_manager.programs)
+        bot_keyboard.rotate(send,self.skill_manager.programs)
+        bot_keyboard.rotate(send,self.skill_manager.programs)
         send(code="bot.setControlState('forward', true)",programs=self.skill_manager.programs)
         # self.env.pause()
         # self.last_events = self.env.send()/
-
+        send("bot.chat('90,0')",self.skill_manager.programs)
+        send("bot.look(90,0)",self.skill_manager.programs)
+        time.sleep(1)
+        bot_keyboard.see(send,self.skill_manager.programs)
+        send("bot.chat('180,0')",self.skill_manager.programs)
+        send("bot.look(180,0)",self.skill_manager.programs)
+        time.sleep(1)
+        bot_keyboard.see(send,self.skill_manager.programs)
+        send("bot.chat('270,0')",self.skill_manager.programs)
+        send("bot.look(270,0)",self.skill_manager.programs)
+        time.sleep(1)
+        bot_keyboard.see(send,self.skill_manager.programs)                
 
     def learn(self, reset_env=True):
         if self.resume:

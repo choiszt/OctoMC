@@ -34,3 +34,13 @@ def preserve(send,programs):
 def see(send,programs):
     command = "bot.blockInSight();" 
     return json.loads(send(command,programs=programs).json())
+
+def look_around(send,programs):
+    with open("./basic_move/look_around.js","r")as f:
+        code=f.read()
+    return json.loads((send(code,programs)).json())
+
+def see(send,programs):
+    with open("./basic_move/see.js","r")as f:
+        code=f.read()
+    return json.loads((send(code,programs)).json())

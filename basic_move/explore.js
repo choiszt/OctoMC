@@ -1,26 +1,30 @@
-async function mineWoodLog(bot) {
-  const woodLogNames = ["oak_log", "birch_log", "spruce_log", "jungle_log", "acacia_log", "dark_oak_log", "mangrove_log"];
-  // Find a wood log block
-  const randomIndex = Math.floor(Math.random() * woodLogNames.length);  
-  const randomWoodType = woodLogNames[randomIndex];  
-  bot.chat(`Find ${randomWoodType}`);
-  const woodLogBlock = await exploreUntil(bot, new Vec3(-1, 0, -1), 100, () => {
-    return bot.findBlock({
-      // matching: block => woodLogNames.includes(block.name),
-      matching: block => block.name=="sand",      
-      maxDistance: 32
-    });
+async function perceive(block_name) {
+  const current_spot_x=bot.entity.position.x
+  const current_spot_y=bot.entity.position.y 
+  const current_spot_z=bot.entity.position.z 
+  bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
+  const blockByName = mcData.blocksByName[block_name];
+  const block = bot.findBlock({ // 有可能找到该方块
+    matching: (block) => block.name === blockByName.name,
+    maxDistance: 1
   });
-  if (!woodLogBlock) {
-    bot.chat("Could not find a wood log.");
-    return;
-  }
 
-  // Mine the wood log block
-  // await mineBlock(bot, woodLogBlock.name, 1);
-  return 1;
+  if (block) {
+    // 获取方块坐标
+    const x = block.position.x.toString();
+    const y = block.position.y.toString();
+    const z = block.position.z.toString();
+    bot.chat(((current_spot_x+x)/2).toString())
+    bot.chat(`Found ${block_name} at X: ${x}, Y: ${y}, Z: ${z}`);
+    let goal = new GoalNear(block.position.x,block.position.y,block.position.z);
+    bot.pathfinder.setGoal(goal);
+
+    // 返回 x 坐标
+  } else {
+    bot.chat(`Did not find ${block_name}.`);
+    return
+  }
 }
-while (true) {
-  await mineWoodLog(bot);
-  break;
-}
+
+
+// await perceive("sand")

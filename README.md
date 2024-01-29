@@ -57,6 +57,7 @@ cd mineflayer-collectblock
 npx tsc
 cd ..
 npm install
+npm install robotjs # Choiszt: For the capturing pipeline
 ```
 
 ## Minecraft Instance Install
