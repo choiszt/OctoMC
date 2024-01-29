@@ -10,9 +10,9 @@ azure_login = {
     "version": "fabric-loader-0.14.18-1.19", # the version Voyager is tested on
 }
 from voyager.agents.choiszt_keyboard import change_gamemode
-change_gamemode("spectator")
+# change_gamemode("spectator")
 voyager = Voyager(
-    mc_port=39919,
+    mc_port=42399,
     openai_api_key=openai.api_key,
 )
 
