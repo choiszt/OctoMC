@@ -88,10 +88,11 @@ async function look_around_and_see_teleport(block_name) {
   await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
   const blockByName = mcData.blocksByName[block_name];
 try{
-  const block = bot.findBlock({ // 有可能找到该方块
-    matching: (block) => block.name === blockByName.name,
-    maxDistance: 64
-  });
+  const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
+  // const block = bot.findBlock({ // 有可能找到该方块
+  //   matching: (block) => block.name === blockByName.name,
+  //   maxDistance: 64
+  // });
 
   
   if (block){
@@ -165,7 +166,6 @@ async function perceive(block_name) {
       const x = block.position.x.toString();
       const y = block.position.y.toString();
       const z = block.position.z.toString();
-      await bot.chat(((current_spot_x + x) / 2).toString());
       await bot.chat(`Found ${block_name} at X: ${x}, Y: ${y}, Z: ${z}`);
       let goal = new GoalNear(block.position.x, block.position.y, block.position.z);
       bot.pathfinder.setGoal(goal);
@@ -177,6 +177,20 @@ async function perceive(block_name) {
   }
 }
 // Explore downward for 60 seconds: exploreUntil(bot, new Vec3(0, -1, 0), 60);
+
+async function walkto(x,y,z){
+  try{  const woodLogBlock=await super_explore(bot, new Vec3(x,y,z), 60, () => {
+    const target = (bot.entity.position==new Vec3(x,y,z))
+    return target;
+  });
+  if (target){
+    bot.chat("explore success!")
+  }
+}
+  catch (error){
+    bot.chat(`${error}`)
+  }
+}
 
 async function super_explore(
   bot,
@@ -247,7 +261,9 @@ async function super_explore(
       }, maxTime * 1000);
   });
 }
+// look_around_and_see_teleport('Chicken')
+bot.chat('1')
+bot.lookAt(new Vec3(-270, 64, 240))
+bot.chat('2')
 
-
-
-look_around_and_see_teleport('sand')
+walkto(-270, 64, 300)
