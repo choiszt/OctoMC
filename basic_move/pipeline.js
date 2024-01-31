@@ -87,10 +87,13 @@ async function look_around_and_see_teleport(block_name) {
   let can_see=false
   await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
   const blockByName = mcData.blocksByName[block_name];
+try{
   const block = bot.findBlock({ // 有可能找到该方块
     matching: (block) => block.name === blockByName.name,
     maxDistance: 64
   });
+
+  
   if (block){
       if (bot.canSeeBlock(block)) {
         await bot.chat(`I can see ${block.name}`);
@@ -111,23 +114,24 @@ async function look_around_and_see_teleport(block_name) {
 {  const x = block.position.x;
   const y = block.position.y;
   const z = block.position.z;
-  await bot.chat(`the ${block.name}is at ${x} ${y} ${z}`)
+  await bot.chat(`the ${block.name} at ${x} ${y} ${z}`)
   await bot.lookAt(block.position)
   await bot.chat('look success')
   await new_look_around()
   await bot.lookAt(block.position) //look at the target
-  await super_explore(bot,block.position)
-  await exploreUntil(bot, block.position, 60, () => {
+  // await super_explore(bot,block.position)
+  const woodLogBlock=await super_explore(bot, block.position, 60, () => {
     const foundLog = bot.findBlock({
       matching: tar_block => tar_block.name==block.name,
       maxDistance: 2
     });
-    return;
+    return foundLog;
   });
   // let goal = new GoalNear(x, y, z);
   // await bot.pathfinder.setGoal(goal)
-  bot.chat("success!!!")
+  await mineBlock(bot, woodLogBlock.name, 1);
   await new_look_around()
+  bot.chat("mission success!!!")
   return 
   // await bot.chat(`start teleport`);
   // await bot.chat(`Found ${block_name} at X: ${x}, Y: ${y}, Z: ${z}`);
@@ -135,6 +139,11 @@ async function look_around_and_see_teleport(block_name) {
   // await bot.chat(`finish!!!!`)
   // return can_see,block}
 }}
+catch (error){
+  bot.chat(`${error}`)
+}
+}
+
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
