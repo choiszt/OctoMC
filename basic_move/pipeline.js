@@ -88,11 +88,11 @@ async function look_around_and_see_teleport(block_name) {
   await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
   const blockByName = mcData.blocksByName[block_name];
 try{
-  const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
-  // const block = bot.findBlock({ // 有可能找到该方块
-  //   matching: (block) => block.name === blockByName.name,
-  //   maxDistance: 64
-  // });
+  // const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
+  const block = bot.findBlock({ // 有可能找到该方块
+    matching: (block) => block.name === blockByName.name,
+    maxDistance: 64
+  });
 
   
   if (block){
@@ -119,6 +119,7 @@ try{
   await bot.lookAt(block.position)
   await bot.chat('look success')
   await new_look_around()
+  // await bot.chat(`/tp ${x} ${y+10} ${z}`) teleport version
   await bot.lookAt(block.position) //look at the target
   // await super_explore(bot,block.position)
   const woodLogBlock=await super_explore(bot, block.position, 60, () => {
@@ -261,9 +262,9 @@ async function super_explore(
       }, maxTime * 1000);
   });
 }
-// look_around_and_see_teleport('Chicken')
-bot.chat('1')
-bot.lookAt(new Vec3(-270, 64, 240))
-bot.chat('2')
+look_around_and_see_teleport('sand')
+// bot.chat('1')
+// bot.lookAt(new Vec3(-270, 64, 240))
+// bot.chat('2')
 
-walkto(-270, 64, 300)
+// walkto(-270, 64, 300)
