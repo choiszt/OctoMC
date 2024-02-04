@@ -5,6 +5,10 @@ async function screenshot(){
     robot.keyTap('f2');
   }
 
+async function disabled_falldamage(){
+  robot.chat("/gamerule fallDamage false")
+}
+
 async function look_around() {
   for (let index = 0; index < angles.length; index++) {
     const angle = angles[index];
