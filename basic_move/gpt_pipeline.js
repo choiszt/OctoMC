@@ -9,28 +9,93 @@ async function disabled_falldamage(){
   robot.chat("/gamerule fallDamage false")
 }
 
+async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targetY,targetZ){
+  const deltaX = targetX - currentSpotX;
+  const deltaY = targetY - currentSpotY;
+  const deltaZ = targetZ - currentSpotZ;
+  
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+  return distance
+}
+async function find(block_name){
+  const current_spot_x=bot.entity.position.x
+  const current_spot_y=bot.entity.position.y 
+  const current_spot_z=bot.entity.position.z 
+  let can_see=false
+  await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
+  const blockByName = mcData.blocksByName[block_name];
+try{
+  const block = bot.findBlock({ 
+    matching: (block) => block.name === blockByName.name,
+    maxDistance: 64
+  });
+
+  if (block){
+      if (bot.canSeeBlock(block)) {
+        await bot.chat(`I can see ${block.name}`);
+        can_see=true
+      } 
+      else {
+        await bot.chat(`I can't see ${block.name}`);
+      }
+      await delay(500); 
+    }
+  else {
+    await bot.chat(`Did not find ${block_name}.`);
+    return
+  }
+  if (can_see==true)
+{  const x = block.position.x;
+  const y = block.position.y;
+  const z = block.position.z;
+  await bot.chat(`the ${block.name} at ${x} ${y} ${z}`)
+  await bot.lookAt(block.position)
+  delay(2000)
+  const rotation=bot.entity.yaw
+  await bot.look(0,0)
+  const distance=await cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z)
+  bot.chat(`the distance between the bot and the block is ${distance}`)
+  return [block,rotation,distance]
+}}
+catch (error){
+  bot.chat(`${error}`)
+}
+}
+
+async function teleport(rot, dis){
+  try{
+    //when the rotation is PI, the minecraft shows 0
+    await bot.look(rot,0)
+    delay(3000)
+    bot.chat(`now look at ${rot}`)
+    x=bot.entity.position.x
+    y=bot.entity.position.y
+    z=bot.entity.position.z
+    const dz=-dis*Math.cos(rot)
+    const dx=-dis*Math.sin(rot)
+    x=x+dx
+    z=z+dz
+    bot.chat(`/tp ${x} ${y+5} ${z}`) 
+  }
+  catch (error){
+    bot.chat(`${error}`)
+  }
+
+
+const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
+await teleport(rotation,distance)
+// await look_around()
+await mineBlock(bot, "sand", 1);
 async function look_around() {
-  for (let index = 0; index < angles.length; index++) {
-    const angle = angles[index];
-    await bot.look(angle, 0);
-    await bot.chat(angle.toString());
+  // yaw = bot.entity.yaw
+  yaw = 0
+  for (let index = 0; index < 12; index++) {
+    await bot.look(yaw, 0);
+    await bot.chat(`now look ${yaw}`)
     await delay(1000);
     await screenshot();
     // 停留一秒钟
-    await delay(500); // 1000毫秒等于1秒
-  }
-}
-
-async function new_look_around() {
-  yaw = bot.entity.yaw
-  for (let index = 0; index < 4; index++) {
-    await bot.look(yaw, 0);
-    await bot.chat(`now look ${yaw}`)
-    delay(1000);
-    await screenshot();
-    // 停留一秒钟
-    yaw=yaw+Math.PI/2;
-    await delay(500); // 1000毫秒等于1秒
+    yaw=yaw+Math.PI/6;
   }
 }
 
@@ -41,7 +106,7 @@ async function look_around_and_see(block_name) {
   let can_see=false
   await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
   const blockByName = mcData.blocksByName[block_name];
-  const block = bot.findBlock({ // 有可能找到该方块
+  const block = bot.findBlock({ 
     matching: (block) => block.name === blockByName.name,
     maxDistance: 64
   });
@@ -65,7 +130,7 @@ async function look_around_and_see(block_name) {
       }
 
       // 停留一秒钟
-      await delay(500); // 1000毫秒等于1秒
+      await delay(500); 
     }
   }
   else {
@@ -93,7 +158,7 @@ async function look_around_and_see_teleport(block_name) {
   const blockByName = mcData.blocksByName[block_name];
 try{
   // const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
-  const block = bot.findBlock({ // 有可能找到该方块
+  const block = bot.findBlock({ 
     matching: (block) => block.name === blockByName.name,
     maxDistance: 64
   });
@@ -109,7 +174,7 @@ try{
       }
 
       // 停留一秒钟
-      await delay(500); // 1000毫秒等于1秒
+      await delay(500); 
     }
   else {
     await bot.chat(`Did not find ${block_name}.`);
@@ -266,9 +331,64 @@ async function super_explore(
       }, maxTime * 1000);
   });
 }
-look_around_and_see_teleport('sand')
+// look_around_and_see_teleport('sand')
 // bot.chat('1')
 // bot.lookAt(new Vec3(-270, 64, 240))
 // bot.chat('2')
 
 // walkto(-270, 64, 300)
+async function test(block_name) {
+  const current_spot_x=bot.entity.position.x
+  const current_spot_y=bot.entity.position.y 
+  const current_spot_z=bot.entity.position.z 
+  let can_see=false
+  await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
+  const blockByName = mcData.blocksByName[block_name];
+try{
+  // const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
+  const block = bot.findBlock({ 
+    matching: (block) => block.name === blockByName.name,
+    maxDistance: 64
+  });
+
+  
+  if (block){
+      if (bot.canSeeBlock(block)) {
+        await bot.chat(`I can see ${block.name}`);
+        can_see=true
+      } 
+      else {
+        await bot.chat(`I can't see ${block.name}`);
+      }
+
+      // 停留一秒钟
+      await delay(500); 
+    }
+  else {
+    await bot.chat(`Did not find ${block_name}.`);
+    return
+  }
+  if (can_see==true)
+{  const x = block.position.x;
+  const y = block.position.y;
+  const z = block.position.z;
+  await bot.look(0,0)
+  await bot.chat(`the ${block.name} at ${x} ${y} ${z}`)
+  await bot.lookAt(block.position)
+  await bot.chat('look success')
+  // await new_look_around()
+  // await bot.chat(`/tp ${x} ${y+10} ${z}`) teleport version
+  delay(5000)
+  await bot.lookAt(block.position) //look at the target
+  delay(5000)
+  const yaw=bot.entity.yaw
+  bot.chat(`the yaw is ${yaw}`)
+  delay(500)
+  await bot.look(yaw+PI,0)
+  delay(5000)
+  await bot.look(yaw,0)
+}}
+catch (error){
+  bot.chat(`${error}`)
+}
+}
