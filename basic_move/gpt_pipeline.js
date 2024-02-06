@@ -1,14 +1,17 @@
 const angles = [0, 90, 180, 270];
 const PI = Math.PI
+
+// Utility Functions:
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 async function screenshot(){
     const robot = require('robotjs');
     robot.keyTap('f2');
   }
-
 async function disabled_falldamage(){
   robot.chat("/gamerule fallDamage false")
 }
-
 async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targetY,targetZ){
   const deltaX = targetX - currentSpotX;
   const deltaY = targetY - currentSpotY;
@@ -62,6 +65,7 @@ catch (error){
 }
 }
 
+// Action List Functions:
 async function teleport(rot, dis){
   try{
     //when the rotation is PI, the minecraft shows 0
@@ -79,7 +83,7 @@ async function teleport(rot, dis){
   }
   catch (error){
     bot.chat(`${error}`)
-  }
+  }}
 
 
 const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
@@ -99,57 +103,7 @@ async function look_around() {
   }
 }
 
-async function look_around_and_see(block_name) {
-  const current_spot_x=bot.entity.position.x
-  const current_spot_y=bot.entity.position.y 
-  const current_spot_z=bot.entity.position.z 
-  let can_see=false
-  await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
-  const blockByName = mcData.blocksByName[block_name];
-  const block = bot.findBlock({ 
-    matching: (block) => block.name === blockByName.name,
-    maxDistance: 64
-  });
-  if (block){
-
-    for (let index = 0; index < angles.length; index++) {
-      const angle = angles[index];
-      await bot.look(angle, 0);
-      await bot.chat(`bot look at direction:${angle.toString()}`);
-      await delay(1000);
-      await screenshot();
-
-      if (bot.canSeeBlock(block)) {
-        await bot.chat(`I can see ${block.name}`);
-        await bot.chat(`Stop looking around`);
-        can_see=true
-        break
-      } 
-      else {
-        await bot.chat(`I can't see ${block.name}`);
-      }
-
-      // 停留一秒钟
-      await delay(500); 
-    }
-  }
-  else {
-    await bot.chat(`Did not find ${block_name}.`);
-    return
-  }
-  if (can_see==true)
-{  const x = block.position.x.toString();
-  const y = block.position.y.toString();
-  const z = block.position.z.toString();
-  await bot.chat(`start explore`);
-  await bot.chat(`Found ${block_name} at X: ${x}, Y: ${y}, Z: ${z}`);
-  let goal = new GoalNear(block.position.x,block.position.y,block.position.z);
-  bot.pathfinder.setGoal(goal);
-  await bot.chat(`finish!!!!`)
-  return can_see,block}
-}
-
-async function look_around_and_see_teleport(block_name) {
+async function demo_pipeline(block_name) {
   const current_spot_x=bot.entity.position.x
   const current_spot_y=bot.entity.position.y 
   const current_spot_z=bot.entity.position.z 
@@ -216,9 +170,7 @@ catch (error){
 }
 
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+
 
 async function perceive(block_name) {
   const current_spot_x = bot.entity.position.x;
@@ -248,19 +200,6 @@ async function perceive(block_name) {
 }
 // Explore downward for 60 seconds: exploreUntil(bot, new Vec3(0, -1, 0), 60);
 
-async function walkto(x,y,z){
-  try{  const woodLogBlock=await super_explore(bot, new Vec3(x,y,z), 60, () => {
-    const target = (bot.entity.position==new Vec3(x,y,z))
-    return target;
-  });
-  if (target){
-    bot.chat("explore success!")
-  }
-}
-  catch (error){
-    bot.chat(`${error}`)
-  }
-}
 
 async function super_explore(
   bot,
@@ -330,65 +269,4 @@ async function super_explore(
           resolve(null);
       }, maxTime * 1000);
   });
-}
-// look_around_and_see_teleport('sand')
-// bot.chat('1')
-// bot.lookAt(new Vec3(-270, 64, 240))
-// bot.chat('2')
-
-// walkto(-270, 64, 300)
-async function test(block_name) {
-  const current_spot_x=bot.entity.position.x
-  const current_spot_y=bot.entity.position.y 
-  const current_spot_z=bot.entity.position.z 
-  let can_see=false
-  await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
-  const blockByName = mcData.blocksByName[block_name];
-try{
-  // const block = bot.nearestEntity((entity) => entity.name === 'Chicken' && bot.entity.position.distanceTo(entity.position) < 54);
-  const block = bot.findBlock({ 
-    matching: (block) => block.name === blockByName.name,
-    maxDistance: 64
-  });
-
-  
-  if (block){
-      if (bot.canSeeBlock(block)) {
-        await bot.chat(`I can see ${block.name}`);
-        can_see=true
-      } 
-      else {
-        await bot.chat(`I can't see ${block.name}`);
-      }
-
-      // 停留一秒钟
-      await delay(500); 
-    }
-  else {
-    await bot.chat(`Did not find ${block_name}.`);
-    return
-  }
-  if (can_see==true)
-{  const x = block.position.x;
-  const y = block.position.y;
-  const z = block.position.z;
-  await bot.look(0,0)
-  await bot.chat(`the ${block.name} at ${x} ${y} ${z}`)
-  await bot.lookAt(block.position)
-  await bot.chat('look success')
-  // await new_look_around()
-  // await bot.chat(`/tp ${x} ${y+10} ${z}`) teleport version
-  delay(5000)
-  await bot.lookAt(block.position) //look at the target
-  delay(5000)
-  const yaw=bot.entity.yaw
-  bot.chat(`the yaw is ${yaw}`)
-  delay(500)
-  await bot.look(yaw+PI,0)
-  delay(5000)
-  await bot.look(yaw,0)
-}}
-catch (error){
-  bot.chat(`${error}`)
-}
 }
