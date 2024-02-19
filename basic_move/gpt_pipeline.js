@@ -66,30 +66,29 @@ catch (error){
 }
 
 // Action List Functions:
-async function teleport(rot, dis){
-  try{
-    //when the rotation is PI, the minecraft shows 0
-    await bot.look(rot,0)
-    delay(3000)
-    bot.chat(`now look at ${rot}`)
-    x=bot.entity.position.x
-    y=bot.entity.position.y
-    z=bot.entity.position.z
-    const dz=-dis*Math.cos(rot)
-    const dx=-dis*Math.sin(rot)
-    x=x+dx
-    z=z+dz
-    bot.chat(`/tp ${x} ${y+5} ${z}`) 
-  }
-  catch (error){
-    bot.chat(`${error}`)
-  }}
+function teleport(rot, dis) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      //when the rotation is PI, the minecraft shows 0
+      await bot.look(rot, 0);
+      delay(3000);
+      bot.chat(`now look at ${rot}`);
+      x = bot.entity.position.x;
+      y = bot.entity.position.y;
+      z = bot.entity.position.z;
+      const dz = -dis * Math.cos(rot);
+      const dx = -dis * Math.sin(rot);
+      x = x + dx;
+      z = z + dz;
+      bot.chat(`/tp ${x} ${y + 5} ${z}`);
+      resolve(); 
+    } catch (error) {
+      reject(error); 
+    }
+  });
+}
 
 
-const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
-await teleport(rotation,distance)
-// await look_around()
-await mineBlock(bot, "sand", 1);
 async function look_around() {
   // yaw = bot.entity.yaw
   yaw = 0
@@ -169,38 +168,6 @@ catch (error){
 }
 }
 
-
-
-
-async function perceive(block_name) {
-  const current_spot_x = bot.entity.position.x;
-  const current_spot_y = bot.entity.position.y;
-  const current_spot_z = bot.entity.position.z;
-  try {
-    await bot.chat(`Current spot at X: ${current_spot_x}, Y: ${current_spot_y}, Z: ${current_spot_z}`);
-    const blockByName = mcData.blocksByName[block_name];
-    const block = bot.findBlock({
-      matching: (block) => block.name === blockByName.name,
-      maxDistance: 32
-    });
-
-    if (block) {
-      const x = block.position.x.toString();
-      const y = block.position.y.toString();
-      const z = block.position.z.toString();
-      await bot.chat(`Found ${block_name} at X: ${x}, Y: ${y}, Z: ${z}`);
-      let goal = new GoalNear(block.position.x, block.position.y, block.position.z);
-      bot.pathfinder.setGoal(goal);
-    } else {
-      await bot.chat(`Did not find ${block_name}.`);
-    }
-  } catch (error) {
-    await bot.chat("An error occurred: " + error.message);
-  }
-}
-// Explore downward for 60 seconds: exploreUntil(bot, new Vec3(0, -1, 0), 60);
-
-
 async function super_explore(
   bot,
   direction,
@@ -270,3 +237,35 @@ async function super_explore(
       }, maxTime * 1000);
   });
 }
+
+async function verify(block) {
+  const bot_x=bot.entity.position.x
+  const bot_y=bot.entity.position.y 
+  const bot_z=bot.entity.position.z 
+  const x = block.position.x;
+  const y = block.position.y;
+  const z = block.position.z;
+  bot.chat(`${bot_x},${bot_y},${bot_z}`)
+try{
+  dis=cal_distance(bot_x,bot_y,bot_z,x,y,z)
+  if (dis<50){
+    return true
+  }
+  else {
+    return false
+  }
+}
+catch (error){
+  bot.chat(`${error}`)
+}
+}
+
+const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
+await teleport(rotation,distance)
+await delay(5000)
+// await look_around()
+signal=await verify(block)
+bot.chat(`the task success: ${signal}`)
+// await mineBlock(bot, "sand", 1);
+
+
