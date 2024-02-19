@@ -319,8 +319,14 @@ class Voyager:
         self.env.unpause()
         send=self.env.send #post the command to Minecraft
         bot_keyboard.initial(send,self.skill_manager.programs)
-        change_to_bot()         
-        bot_keyboard.initial(send,self.skill_manager.programs) 
+        change_to_bot()  
+        bot_keyboard.initial(send,self.skill_manager.programs)
+        def move(send,programs):
+            with open("./basic_move/gpt_pipeline.js","r")as f:
+                code=f.read()
+            return json.loads((send(code,programs)).json())
+        data=move(send,self.skill_manager.programs)           
+        # bot_keyboard.initial(send,self.skill_manager.programs) 
 
     def learn(self, reset_env=True):
         if self.resume:

@@ -20,6 +20,8 @@ async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targe
   const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
   return distance
 }
+
+
 async function find(block_name){
   const current_spot_x=bot.entity.position.x
   const current_spot_y=bot.entity.position.y 
@@ -58,7 +60,11 @@ try{
   await bot.look(0,0)
   const distance=await cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z)
   bot.chat(`the distance between the bot and the block is ${distance}`)
-  return [block,rotation,distance]
+  bot.chat(`${rotation}`)
+  // degree=rad_to_degree(rotation)
+  bot.chat(`the angle towards ${block_name} is ${degree}`)
+  
+  return [block,degree,distance]
 }}
 catch (error){
   bot.chat(`${error}`)
@@ -96,7 +102,7 @@ async function look_around() {
     await bot.look(yaw, 0);
     await bot.chat(`now look ${yaw}`)
     await delay(1000);
-    await screenshot();
+    // await screenshot();
     // 停留一秒钟
     yaw=yaw+Math.PI/6;
   }
@@ -261,11 +267,12 @@ catch (error){
 }
 
 const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
-await teleport(rotation,distance)
-await delay(5000)
-// await look_around()
-signal=await verify(block)
-bot.chat(`the task success: ${signal}`)
-// await mineBlock(bot, "sand", 1);
+await teleport(1.6,30)
+
+// await delay(5000)
+// // await look_around()
+// signal=await verify(block)
+// bot.chat(`the task success: ${signal}`)
+// // await mineBlock(bot, "sand", 1);
 
 
