@@ -119,8 +119,8 @@ class Voyager:
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
         # init agents
+        model_name=action_agent_model_name,
         self.action_agent = OctopusAgent(
-            model_name=action_agent_model_name,
             temperature=action_agent_temperature,
             request_timout=openai_api_request_timeout,
             ckpt_dir=ckpt_dir,
@@ -228,7 +228,7 @@ class Voyager:
                 destination_path = os.path.join(sub_save_path, file_name)
                 shutil.move(source_path, destination_path)
 
-            with open(os.path.join(sub_save_path, "observe.json"),"a+")as f:
+            with open(os.path.join(sub_save_path, "observe.json"),"w+")as f:
                 f.write(json.dumps(current_data))            
             
             # init pipeline for each subtask
@@ -249,7 +249,7 @@ class Voyager:
             # subtask loop, when a subtask is finished, close the loop
             while True:
                 system_message = self.action_agent.render_system_message()
-                human_message = self.action_agent.render_human_message('',task)
+                human_message = self.action_agent.render_human_message(current_data,task)
                 content = system_message.content + "\n\n" + human_message.content
                 gu.save_input(sub_save_path, human_message.content)
                 print("start query")

@@ -8,16 +8,20 @@ await craftItem(bot, name, count) //to craft items. Do not use `bot.craft` or `b
 await smeltItem(bot, name count) //to smelt items. Do not use `bot.openFurnace` directly.
 await placeItem(bot, name, position) //to place blocks. Do not use `bot.placeBlock` directly.
 await killMob(bot, name, timeout) //to kill mobs. Do not use `bot.attack` directly.
-const [rotation, distance] =await find(name) //get the ground truth rotation and distance of the nearby block
+
 
 
 At each round of conversation, I will give you
-Code from the last round: ...
+Observed Objects:
+pic1
+direction=yaw:0.00
+grass_block(1.22,0.71,3.67)
+means the direction of pic1 is yaw=0, and I can perceive grass_block at distance 1.22,0.71 and 3.67
 Task Goal: ...
 Original Subtasks: ...
 Previous Action Code: ...
 Execution Error: ...
-The rotation and distance of the target block if you use await find("name") function:...
+
 
 You should then respond to me with
 Explain (if applicable): Are there any steps missing in your plan? Why does the code not complete the task? What does the chat log and execution error imply?
@@ -36,11 +40,12 @@ Code:
     5) Anything defined outside a function will be ignored, define all your variables inside your functions.
     6) Call `bot.chat` to show the intermediate progress.
     7) Use `teleport(rotation,distance)` when you cannot find something. You should frequently call this before mining blocks or killing mobs. 
-	8) If you want to get the correct rotation and distance for a target block, use function await find(name) before `teleport`, which will give you the ground truth rotation and distance of target block. If you use `teleport`,please marked "###" at the end of explain, in order to do postprocess.
     8) `maxDistance` should always be 32 for `bot.findBlocks` and `bot.findBlock`. Do not cheat.
     9) Do not write infinite loops or recursive functions.
     10) Do not use `bot.on` or `bot.once` to register event listeners. You definitely do not need them.
     11) Name your function in a meaningful way (can infer the task from the name).
 	12) Each time you should only give me one subtask (not all) with its corresponding code.
 
-
+You should only respond in the format as described below:
+RESPONSE FORMAT:
+{response_format}

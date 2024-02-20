@@ -25,7 +25,7 @@ import openai
 class OctopusAgent:
     def __init__(
         self,
-        model_name="gpt-3.5-turbo",
+        model_name="gpt-4",
         temperature=0,
         request_timout=120,
         ckpt_dir="ckpt",
@@ -82,7 +82,128 @@ class OctopusAgent:
         self.history_info['error'] = error    
     
         # scene_graph, object, inventory, task = human_info
-    def render_human_message(self, human_info,task):
+
+    def render_human_message(
+        self, events, code="", task="", context="", critique=""
+    ):
+        chat_messages = []
+        error_messages = []
+        # FIXME: damage_messages is not used
+        damage_messages = []
+        assert events[-1][0] == "observe", "Last event must be observe"
+        for i, (event_type, event) in enumerate(events):
+            if event_type == "onChat":
+                chat_messages.append(event["onChat"])
+            elif event_type == "onError":
+                error_messages.append(event["onError"])
+            elif event_type == "onDamage":
+                damage_messages.append(event["onDamage"])
+            elif event_type == "observe":
+                biome = event["status"]["biome"]
+                time_of_day = event["status"]["timeOfDay"]
+                voxels = event["voxels"]
+                entities = event["status"]["entities"]
+                health = event["status"]["health"]
+                hunger = event["status"]["food"]
+                position = event["status"]["position"]
+                equipment = event["status"]["equipment"]
+                inventory_used = event["status"]["inventoryUsed"]
+                inventory = event["inventory"]
+                assert i == len(events) - 1, "observe must be the last event"
+        observation = ""
+        if code:
+            observation += f"Code from the last round:\n{code}\n\n"
+        else:
+            observation += f"Code from the last round: No code in the first round\n\n"
+        if self.execution_error:
+            if error_messages:
+                error = "\n".join(error_messages)
+                observation += f"Execution error:\n{error}\n\n"
+            else:
+                observation += f"Execution error: No error\n\n"
+        if self.chat_log:
+            if chat_messages:
+                chat_log = "\n".join(chat_messages)
+                observation += f"Chat log: {chat_log}\n\n"
+            else:
+                observation += f"Chat log: None\n\n"
+        observation += f"Biome: {biome}\n\n"
+        observation += f"Time: {time_of_day}\n\n"
+        if voxels:
+            observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
+        else:
+            observation += f"Nearby blocks: None\n\n"
+
+        if entities:
+            nearby_entities = [
+                k for k, v in sorted(entities.items(), key=lambda x: x[1])
+            ]
+            observation += f"Nearby entities (nearest to farthest): {', '.join(nearby_entities)}\n\n"
+        else:
+            observation += f"Nearby entities (nearest to farthest): None\n\n"
+
+        observation += f"Health: {health:.1f}/20\n\n"
+
+        observation += f"Hunger: {hunger:.1f}/20\n\n"
+
+        observation += f"Position: x={position['x']:.1f}, y={position['y']:.1f}, z={position['z']:.1f}\n\n"
+
+        observation += f"Equipment: {equipment}\n\n"
+
+        if inventory:
+            observation += f"Inventory ({inventory_used}/36): {inventory}\n\n"
+        else:
+            observation += f"Inventory ({inventory_used}/36): Empty\n\n"
+
+        if not (
+            task == "Place and deposit useless items into a chest"
+            or task.startswith("Deposit useless items into the chest at")
+        ):
+            observation += self.render_chest_observation()
+
+        observation += f"Task: {task}\n\n"
+
+        if context:
+            observation += f"Context: {context}\n\n"
+        else:
+            observation += f"Context: None\n\n"
+
+        if critique:
+            observation += f"Critique: {critique}\n\n"
+        else:
+            observation += f"Critique: None\n\n"
+
+        return HumanMessage(content=observation)
+            
+    def parse_picinfo(self,info):
+        import re
+        result=''
+        pattern = r"pic(\d+)"
+        result += f'{re.search(pattern, info).group(0)}\n'
+        pattern = r"yaw:\d+\.\d+"
+        result+=f'direction={re.search(pattern, info).group(0)}\n'
+        pattern = r"{(.*?)}"
+        
+        obj_with_dis = re.search(pattern, info).group(1)
+        items = obj_with_dis.split(',')
+        block_dict = {}
+        for i in range(0, len(items), 2):
+            block_type = items[i]
+            value = items[i+1]
+            if block_type not in block_dict:
+                block_dict[block_type] = []
+            block_dict[block_type].append(value)
+
+        formatted_blocks = []
+        for block_type, values in block_dict.items():
+            formatted_values = ",".join(values)
+            formatted_block = f"{block_type}({formatted_values})"
+            formatted_blocks.append(formatted_block)
+
+        result += " ".join(formatted_blocks)
+        return result
+
+    def render_human_message(self, current_data,task):
 
         # Code from the last round: None
         # Task Goal: dig a stone
@@ -92,14 +213,37 @@ class OctopusAgent:
         # The rotation and distance of the target block if you use await find("name") function: None
 
         message = ""    
-        # message += f"Observed Objects: {object}\n"
-        # message += f"Observed Relations: {scene_graph}\n"
-        # if inventory=="[]":
-        #     message += f"Inventory: None\n"
-        # elif inventory:
-        #     message += f"Inventory: {inventory[2:-2]}\n"
+        pic_info = []
+        error_messages = []
+        # FIXME: damage_messages is not used
+        damage_messages = []
+        assert current_data[-1][0] == "observe", "Last event must be observe"
+        for i, (event_type, event) in enumerate(current_data):
+            if event_type == "onChat":
+                if event["onChat"].startswith("pic"): 
+                    pic_info.append(event["onChat"])
+            elif event_type == "onError":
+                error_messages.append(event["onError"])
+            elif event_type == "onDamage":
+                damage_messages.append(event["onDamage"])
+            elif event_type == "observe":
+                biome = event["status"]["biome"]
+                time_of_day = event["status"]["timeOfDay"]
+                voxels = event["voxels"]
+                entities = event["status"]["entities"]
+                health = event["status"]["health"]
+                hunger = event["status"]["food"]
+                position = event["status"]["position"]
+                equipment = event["status"]["equipment"]
+                inventory_used = event["status"]["inventoryUsed"]
+                inventory = event["inventory"]
+                assert i == len(current_data) - 1, "observe must be the last event"
+        message+=f"Observed Objects:\n"
+        for info in pic_info:
+            message+=f"{self.parse_picinfo(info)}\n"
 
         message += f"Task Goal: {task}\n"
+        
         
         if len(self.history_info['subtask']) > 0:
             message += f"Original Subtasks: {self.history_info['subtask']}\n"

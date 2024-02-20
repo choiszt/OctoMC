@@ -1,6 +1,79 @@
 const angles = [0, 90, 180, 270];
 const PI = Math.PI
 
+function get_see_SurroundingBlocks(bot, x_distance, y_distance, z_distance) {
+  const surroundingBlocks = new Set();
+  if ((Math.sin(bot.entity.yaw))>=0 && (Math.cos(bot.entity.yaw))>=0){  //-x -z
+      // bot.chat(`CASE1`)
+      for (let x = -x_distance; x <= 0; x++) {
+          for (let y = -y_distance; y <= y_distance; y++) {
+              for (let z = -z_distance; z <= 0; z++) { 
+                  const block = bot.blockAt(bot.entity.position.offset(x, y, z));
+                  if (block && block.type !== 0) {
+                      if (bot.canSeeBlock(block)){ //if the bot can see the block
+                          // bot.chat(`${}`)
+                          surroundingBlocks.add([block.name,cal_distance_by_block(bot,block)]);
+                      }
+                      
+                  }
+              }
+          }
+      }
+  }
+  if ((Math.sin(bot.entity.yaw))>=0 && (Math.cos(bot.entity.yaw))<=0){  //-x +z
+      // bot.chat(`CASE2`)
+      for (let x = -x_distance; x <= 0; x++) {
+          for (let y = -y_distance; y <= y_distance; y++) {
+              for (let z =0; z <= z_distance; z++) { 
+                  const block = bot.blockAt(bot.entity.position.offset(x, y, z));
+                  if (block && block.type !== 0) {
+                      if (bot.canSeeBlock(block)){ //if the bot can see the block
+                          surroundingBlocks.add([block.name,cal_distance_by_block(bot,block)]);
+                      }
+                      
+                  }
+              }
+          }
+      }
+  }
+
+  if ((Math.sin(bot.entity.yaw))<=0 && (Math.cos(bot.entity.yaw))<=0){  //+x +z
+      // bot.chat(`CASE3`)
+      for (let x = 0; x <= x_distance; x++) {
+          for (let y = -y_distance; y <= y_distance; y++) {
+              for (let z =0; z <= z_distance; z++) { 
+                  const block = bot.blockAt(bot.entity.position.offset(x, y, z));
+                  if (block && block.type !== 0) {
+                      if (bot.canSeeBlock(block)){ //if the bot can see the block
+                          surroundingBlocks.add([block.name,cal_distance_by_block(bot,block)]);
+                      }
+                      
+                  }
+              }
+          }
+      }
+  }
+
+  if ((Math.sin(bot.entity.yaw))<=0 && (Math.cos(bot.entity.yaw))>=0){  //+x -z
+      // bot.chat(`CASE4`)
+      for (let x = 0; x <= x_distance; x++) {
+          for (let y = -y_distance; y <= y_distance; y++) {
+              for (let z =z_distance; z <= 0; z++) { 
+                  const block = bot.blockAt(bot.entity.position.offset(x, y, z));
+                  if (block && block.type !== 0) {
+                      if (bot.canSeeBlock(block)){ //if the bot can see the block
+                          surroundingBlocks.add([block.name,cal_distance_by_block(bot,block)]);
+                      }
+                      
+                  }
+              }
+          }
+      }
+  }
+  // console.log(surroundingBlocks);
+  return surroundingBlocks;
+}
+
 // Utility Functions:
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,7 +85,7 @@ async function screenshot(){
 async function disabled_falldamage(){
   robot.chat("/gamerule fallDamage false")
 }
-async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targetY,targetZ){
+function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targetY,targetZ){
   const deltaX = targetX - currentSpotX;
   const deltaY = targetY - currentSpotY;
   const deltaZ = targetZ - currentSpotZ;
@@ -20,9 +93,17 @@ async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targe
   const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
   return distance
 }
+function cal_distance_by_block(bot,block){
+  const current_spot_x=bot.entity.position.x
+  const current_spot_y=bot.entity.position.y 
+  const current_spot_z=bot.entity.position.z 
+  const x = block.position.x;
+  const y = block.position.y;
+  const z = block.position.z;
+  return cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z).toFixed(2)
+}
 
 function findwhichimage(rotation){
-    
 }
 
 async function find(block_name){
@@ -60,7 +141,7 @@ try{
   await bot.lookAt(block.position)
   delay(2000)
   const rotation=bot.entity.yaw
-  const distance=await cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z)
+  const distance=cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z)
   bot.chat(`the distance between the bot and the block is ${distance}`)
   bot.chat(`${rotation}`)
   // degree=rad_to_degree(rotation)
@@ -102,8 +183,10 @@ async function look_around() {
   // yaw = bot.entity.yaw
   yaw = 0
   for (let index = 0; index < 6; index++) {
+    // bot.chat(`${bot.entity.yaw}`)
+    blockinfo=get_see_SurroundingBlocks(bot, Math.abs(Math.floor(100*Math.sin(bot.entity.yaw))), 2, Math.abs(Math.floor(100*Math.cos(bot.entity.yaw))))
+    bot.chat(`pic${index+1}:{${Array.from(blockinfo)}},yaw:${yaw.toFixed(2)}`)
     await bot.look(yaw, 0);
-    await bot.chat(`now look ${yaw}`)
     await delay(1000);
     // await screenshot();
     // 停留一秒钟
