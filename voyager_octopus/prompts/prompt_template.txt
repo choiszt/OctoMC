@@ -49,3 +49,57 @@ Code:
 You should only respond in the format as described below:
 RESPONSE FORMAT:
 {response_format}
+Explain: ...
+Subtasks:
+1) ...
+2) ...
+3) ...
+...
+Code:
+```javascript
+// helper functions (only if needed, try to avoid them)
+...
+// main function after the helper functions
+async function yourMainFunctionName(bot) {
+	// await teleport(rotation,distance) #plan1: find the sand and teleport
+}
+```
+
+RESPONSE SAMPLE iter1:
+Explain: Since this is the initial request, there's no prior code to explain or evaluate. The task is to find and mine sand in Minecraft using Mineflayer. I can find a sand block in pic6 at the direction yaw=5.24, and the distance is 28.5 and 28.52.
+
+
+Subtasks:
+1) perceive and go near by the sand block
+2) 
+3) ...
+...
+Code:
+```javascript
+// helper functions (only if needed, try to avoid them)
+...
+// main function after the helper functions
+async function yourMainFunctionName(bot) {
+	// await teleport(yaw=5.24,distance=28.5) #plan1: perceive and go near by the sand block
+}
+```
+
+RESPONSE SAMPLE iter2:
+Explain: Since we have successfully perceive the sand, then we can use the mineBlock function to dig a sand block.
+
+Subtasks:
+1) perceive and go near by the sand block
+2) dig a sand block
+3) ...
+...
+Code:
+```javascript
+// helper functions (only if needed, try to avoid them)
+...
+// main function after the helper functions
+async function yourMainFunctionName(bot) {
+
+	// await teleport(yaw=5.24,distance=28.5) #Subtask1: perceive and go near by the sand block
+	// await mineBlock(bot, "wood", 1); #Subtask2: To collect 1 wood block
+}
+```

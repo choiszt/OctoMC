@@ -401,6 +401,7 @@ class OctopusAgent:
     def process_ai_message(self, processed_message):
         retry = 1
         error = None
+        # classes = ["Explain:", "Subtasks:", "Code:", "Target States:"]
         classes = ["Explain:", "Subtasks:", "Code:", "Target States:"]
         idxs = []
         for c in classes:
@@ -429,32 +430,39 @@ class OctopusAgent:
                 #CODE
                 code_str = code.split('```javascript\n')[1].split('```')[0]
                 
-                #TARGET            
-                inv = target.split('Inventory:')[1]
-                inv = inv.split('\n')[0]
-                inv_str = inv.replace(' ', '')
-                obj_states_2 = []
-                obj_states_3 = []
+                # #TARGET            
+                # inv = target.split('Inventory:')[1]
+                # inv = inv.split('\n')[0]
+                # inv_str = inv.replace(' ', '')
+                # obj_states_2 = []
+                # obj_states_3 = []
                 
-                objects = target.split('Information:')[1]
-                objects = objects.split('\n')
-                for obj in objects:
-                    obj = obj.split(')')[-1]
-                    obj_list = obj.split(',')
-                    for i in range(len(obj_list)):
-                        obj_list[i] = obj_list[i].replace(' ', '')
-                    if len(obj_list) == 3:
-                        obj_states_2.append(obj_list)
-                    elif len(obj_list) == 4: 
-                        obj_states_3.append(obj_list)
-                        
+                # objects = target.split('Information:')[1]
+                # objects = objects.split('\n')
+                # for obj in objects:
+                #     obj = obj.split(')')[-1]
+                #     obj_list = obj.split(',')
+                #     for i in range(len(obj_list)):
+                #         obj_list[i] = obj_list[i].replace(' ', '')
+                #     if len(obj_list) == 3:
+                #         obj_states_2.append(obj_list)
+                #     elif len(obj_list) == 4: 
+                #         obj_states_3.append(obj_list)
+
+                #execute code
+                async_function_regex = re.compile(r'async\s+function\s+(\w+)\s*\(\s*bot\s*\)\s*{')
+
+                # 查找所有匹配的async函数并输出对应的await调用
+                function_name = async_function_regex.findall(code_str)[0]
+                exec_code = f"await {function_name}(bot);"        
                 return {
                     "explain": explain_str,
                     "subtask": subtask_str,
                     "code": code_str,
-                    "inventory": inv_str,
-                    "obj_2": obj_states_2, 
-                    "obj_3": obj_states_3,
+                    "exec_code":exec_code
+                    # "inventory": inv_str,
+                    # "obj_2": obj_states_2, 
+                    # "obj_3": obj_states_3,
                 }
             except Exception as e:
                 retry -= 1
