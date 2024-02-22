@@ -154,6 +154,8 @@ class Voyager:
         )
         self.recorder = U.EventRecorder(ckpt_dir=ckpt_dir, resume=resume)
         self.resume = resume
+        with open("./basic_move/gpt_pipeline.js")as f:
+            self.prog=f.read()
 
         # init variables for rollout
         self.action_agent_rollout_num_iter = -1
@@ -297,7 +299,7 @@ class Voyager:
                 break
         return messages, reward, done, info
 
-    def capture(self,reset_env=True):
+    def capture(self,task,reset_env=True):
         if self.resume:
             # keep the inventory
             self.env.reset(
@@ -318,14 +320,25 @@ class Voyager:
         
         self.env.unpause()
         send=self.env.send #post the command to Minecraft
-        bot_keyboard.initial(send,self.skill_manager.programs)
+
         change_to_bot()  
+        while True:
+            messages, reward, done, info = self.step()
+            if done:
+                break
+        messages, reward, done, info = self.rollout(
+            task=task,
+            context='',
+            reset_env=reset_env,
+                )
+        bot_keyboard.initial(send,self.skill_manager.programs)
+        
         bot_keyboard.initial(send,self.skill_manager.programs)
         def move(send,programs):
             with open("./basic_move/gpt_pipeline.js","r")as f:
                 code=f.read()
             return json.loads((send(code,programs)).json())
-        data=move(send,self.skill_manager.programs)           
+        data=move(send,self.skill_manager.programs+self.prog)           
         # bot_keyboard.initial(send,self.skill_manager.programs) 
 
     def learn(self, reset_env=True):

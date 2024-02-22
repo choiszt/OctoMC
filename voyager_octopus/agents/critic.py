@@ -115,7 +115,7 @@ class Octopus_CriticAgent:
         all_message=messages[0].content+messages[1].content
         critic = self.gpt_request(all_message).content
         # critic = self.llm(messages).content
-        print(f"\033[31m****Critic Agent ai message****\n{critic}\033[0m")
+        print(f"[31m****Critic Agent ai message****\n{critic}")
         try:
             response = fix_and_parse_json(critic)
             assert response["success"] in [True, False]
@@ -123,7 +123,7 @@ class Octopus_CriticAgent:
                 response["critique"] = ""
             return response["success"], response["critique"]
         except Exception as e:
-            print(f"\033[31mError parsing critic response: {e} Trying again!\033[0m")
+            print(f"Error parsing critic response: {e} Trying again!")
             return self.ai_check_task_success(
                 messages=messages,
                 max_retries=max_retries - 1,

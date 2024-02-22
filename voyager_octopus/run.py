@@ -17,5 +17,5 @@ voyager = Voyager(
 )
 
 # start lifelong learning
-voyager.capture("find_wood_log")
+voyager.capture("Mine 3 wood log")
 

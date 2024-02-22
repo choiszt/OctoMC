@@ -25,7 +25,7 @@ import openai
 class OctopusAgent:
     def __init__(
         self,
-        model_name="gpt-4",
+        model_name="gpt-4-0125-preview",
         temperature=0,
         request_timout=120,
         ckpt_dir="ckpt",
@@ -83,97 +83,97 @@ class OctopusAgent:
     
         # scene_graph, object, inventory, task = human_info
 
-    def render_human_message(
-        self, events, code="", task="", context="", critique=""
-    ):
-        chat_messages = []
-        error_messages = []
-        # FIXME: damage_messages is not used
-        damage_messages = []
-        assert events[-1][0] == "observe", "Last event must be observe"
-        for i, (event_type, event) in enumerate(events):
-            if event_type == "onChat":
-                chat_messages.append(event["onChat"])
-            elif event_type == "onError":
-                error_messages.append(event["onError"])
-            elif event_type == "onDamage":
-                damage_messages.append(event["onDamage"])
-            elif event_type == "observe":
-                biome = event["status"]["biome"]
-                time_of_day = event["status"]["timeOfDay"]
-                voxels = event["voxels"]
-                entities = event["status"]["entities"]
-                health = event["status"]["health"]
-                hunger = event["status"]["food"]
-                position = event["status"]["position"]
-                equipment = event["status"]["equipment"]
-                inventory_used = event["status"]["inventoryUsed"]
-                inventory = event["inventory"]
-                assert i == len(events) - 1, "observe must be the last event"
-        observation = ""
-        if code:
-            observation += f"Code from the last round:\n{code}\n\n"
-        else:
-            observation += f"Code from the last round: No code in the first round\n\n"
-        if self.execution_error:
-            if error_messages:
-                error = "\n".join(error_messages)
-                observation += f"Execution error:\n{error}\n\n"
-            else:
-                observation += f"Execution error: No error\n\n"
-        if self.chat_log:
-            if chat_messages:
-                chat_log = "\n".join(chat_messages)
-                observation += f"Chat log: {chat_log}\n\n"
-            else:
-                observation += f"Chat log: None\n\n"
-        observation += f"Biome: {biome}\n\n"
-        observation += f"Time: {time_of_day}\n\n"
-        if voxels:
-            observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
-        else:
-            observation += f"Nearby blocks: None\n\n"
+    # def render_human_message(
+    #     self, events, code="", task="", context="", critique=""
+    # ):
+    #     chat_messages = []
+    #     error_messages = []
+    #     # FIXME: damage_messages is not used
+    #     damage_messages = []
+    #     assert events[-1][0] == "observe", "Last event must be observe"
+    #     for i, (event_type, event) in enumerate(events):
+    #         if event_type == "onChat":
+    #             chat_messages.append(event["onChat"])
+    #         elif event_type == "onError":
+    #             error_messages.append(event["onError"])
+    #         elif event_type == "onDamage":
+    #             damage_messages.append(event["onDamage"])
+    #         elif event_type == "observe":
+    #             biome = event["status"]["biome"]
+    #             time_of_day = event["status"]["timeOfDay"]
+    #             voxels = event["voxels"]
+    #             entities = event["status"]["entities"]
+    #             health = event["status"]["health"]
+    #             hunger = event["status"]["food"]
+    #             position = event["status"]["position"]
+    #             equipment = event["status"]["equipment"]
+    #             inventory_used = event["status"]["inventoryUsed"]
+    #             inventory = event["inventory"]
+    #             assert i == len(events) - 1, "observe must be the last event"
+    #     observation = ""
+    #     if code:
+    #         observation += f"Code from the last round:\n{code}\n\n"
+    #     else:
+    #         observation += f"Code from the last round: No code in the first round\n\n"
+    #     if self.execution_error:
+    #         if error_messages:
+    #             error = "\n".join(error_messages)
+    #             observation += f"Execution error:\n{error}\n\n"
+    #         else:
+    #             observation += f"Execution error: No error\n\n"
+    #     if self.chat_log:
+    #         if chat_messages:
+    #             chat_log = "\n".join(chat_messages)
+    #             observation += f"Chat log: {chat_log}\n\n"
+    #         else:
+    #             observation += f"Chat log: None\n\n"
+    #     observation += f"Biome: {biome}\n\n"
+    #     observation += f"Time: {time_of_day}\n\n"
+    #     if voxels:
+    #         observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
+    #     else:
+    #         observation += f"Nearby blocks: None\n\n"
 
-        if entities:
-            nearby_entities = [
-                k for k, v in sorted(entities.items(), key=lambda x: x[1])
-            ]
-            observation += f"Nearby entities (nearest to farthest): {', '.join(nearby_entities)}\n\n"
-        else:
-            observation += f"Nearby entities (nearest to farthest): None\n\n"
+    #     if entities:
+    #         nearby_entities = [
+    #             k for k, v in sorted(entities.items(), key=lambda x: x[1])
+    #         ]
+    #         observation += f"Nearby entities (nearest to farthest): {', '.join(nearby_entities)}\n\n"
+    #     else:
+    #         observation += f"Nearby entities (nearest to farthest): None\n\n"
 
-        observation += f"Health: {health:.1f}/20\n\n"
+    #     observation += f"Health: {health:.1f}/20\n\n"
 
-        observation += f"Hunger: {hunger:.1f}/20\n\n"
+    #     observation += f"Hunger: {hunger:.1f}/20\n\n"
 
-        observation += f"Position: x={position['x']:.1f}, y={position['y']:.1f}, z={position['z']:.1f}\n\n"
+    #     observation += f"Position: x={position['x']:.1f}, y={position['y']:.1f}, z={position['z']:.1f}\n\n"
 
-        observation += f"Equipment: {equipment}\n\n"
+    #     observation += f"Equipment: {equipment}\n\n"
 
-        if inventory:
-            observation += f"Inventory ({inventory_used}/36): {inventory}\n\n"
-        else:
-            observation += f"Inventory ({inventory_used}/36): Empty\n\n"
+    #     if inventory:
+    #         observation += f"Inventory ({inventory_used}/36): {inventory}\n\n"
+    #     else:
+    #         observation += f"Inventory ({inventory_used}/36): Empty\n\n"
 
-        if not (
-            task == "Place and deposit useless items into a chest"
-            or task.startswith("Deposit useless items into the chest at")
-        ):
-            observation += self.render_chest_observation()
+    #     if not (
+    #         task == "Place and deposit useless items into a chest"
+    #         or task.startswith("Deposit useless items into the chest at")
+    #     ):
+    #         observation += self.render_chest_observation()
 
-        observation += f"Task: {task}\n\n"
+    #     observation += f"Task: {task}\n\n"
 
-        if context:
-            observation += f"Context: {context}\n\n"
-        else:
-            observation += f"Context: None\n\n"
+    #     if context:
+    #         observation += f"Context: {context}\n\n"
+    #     else:
+    #         observation += f"Context: None\n\n"
 
-        if critique:
-            observation += f"Critique: {critique}\n\n"
-        else:
-            observation += f"Critique: None\n\n"
+    #     if critique:
+    #         observation += f"Critique: {critique}\n\n"
+    #     else:
+    #         observation += f"Critique: None\n\n"
 
-        return HumanMessage(content=observation)
+    #     return HumanMessage(content=observation)
             
     def parse_picinfo(self,info):
         import re
@@ -194,6 +194,11 @@ class OctopusAgent:
                 block_dict[block_type] = []
             block_dict[block_type].append(value)
 
+        for block_type, values in block_dict.items():
+            if len(values) > 2:
+                values = sorted(values)[:2]
+                block_dict[block_type]=values
+
         formatted_blocks = []
         for block_type, values in block_dict.items():
             formatted_values = ",".join(values)
@@ -211,6 +216,31 @@ class OctopusAgent:
         # Previous Action Code: None
         # Execution Error: None
         # The rotation and distance of the target block if you use await find("name") function: None
+    #     # FIXME: damage_messages is not used
+    #     damage_messages = []
+    #     assert events[-1][0] == "observe", "Last event must be observe"
+    #     for i, (event_type, event) in enumerate(events):
+    #         if event_type == "onChat":
+    #             chat_messages.append(event["onChat"])
+    #         elif event_type == "onError":
+    #             error_messages.append(event["onError"])
+    #         elif event_type == "onDamage":
+    #             damage_messages.append(event["onDamage"])
+    #         elif event_type == "observe":
+    #             biome = event["status"]["biome"]
+    #             time_of_day = event["status"]["timeOfDay"]
+    #             voxels = event["voxels"]
+    #             entities = event["status"]["entities"]
+    #             health = event["status"]["health"]
+    #             hunger = event["status"]["food"]
+    #             position = event["status"]["position"]
+    #             equipment = event["status"]["equipment"]
+    #             inventory_used = event["status"]["inventoryUsed"]
+    #             inventory = event["inventory"]
+    #             assert i == len(events) - 1, "observe must be the last event"
+
+
+
 
         message = ""    
         pic_info = []
@@ -238,6 +268,31 @@ class OctopusAgent:
                 inventory_used = event["status"]["inventoryUsed"]
                 inventory = event["inventory"]
                 assert i == len(current_data) - 1, "observe must be the last event"
+
+
+
+    #     observation += f"Equipment: {equipment}\n\n"
+
+
+    #     if not (
+    #         task == "Place and deposit useless items into a chest"
+    #         or task.startswith("Deposit useless items into the chest at")
+    #     ):
+    #         observation += self.render_chest_observation()
+
+    #     observation += f"Task: {task}\n\n"
+
+    #     if context:
+    #         observation += f"Context: {context}\n\n"
+    #     else:
+    #         observation += f"Context: None\n\n"
+
+    #     if critique:
+    #         observation += f"Critique: {critique}\n\n"
+    #     else:
+    #         observation += f"Critique: None\n\n"    
+
+        
         message+=f"Observed Objects:\n"
         for info in pic_info:
             message+=f"{self.parse_picinfo(info)}\n"
@@ -252,16 +307,25 @@ class OctopusAgent:
 
         if len(self.history_info['code']) > 0:
             message += f"Previous Action Code: {self.history_info['code']}\n"
-            if len(self.history_info['error']) > 0:
-                message += f"Execution Error: {self.history_info['error']}\n"
+            if error_messages:
+                error = "\n".join(error_messages)
+                message += f"Execution error:\n{error}\n\n"
             else:
                 message += f"Execution Error: No error\n"  
+            # if len(self.history_info['error']) > 0:
+            #     message += f"Execution Error:{self.history_info['error']}\n"
+            # else:
+            #     message += f"Execution Error: No error\n"  
         elif len(self.history_info['code']) == 0: 
             message += f"Previous Action Code: No code\n"
-            message += f"Execution error: No error\n"  
-        
-        message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, and Target States, according to the instruction above. Remember you can only use the functions provided above and pay attention to the response format."
-            
+            message += f"Execution error: No error\n"
+
+        if inventory:
+            message += f"Inventory: {inventory}\n"
+        else:
+            message += f"Inventory: Empty\n"
+        # message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should give me just one subtask each turn and can only use the functions provided above and pay attention to the response format."
+        message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn ."    
         return HumanMessage(content=message)
 
     def update_chest_memory(self, chests):
@@ -399,74 +463,73 @@ class OctopusAgent:
     #     return HumanMessage(content=observation)
 
     def process_ai_message(self, processed_message):
-        retry = 1
         error = None
         # classes = ["Explain:", "Subtasks:", "Code:", "Target States:"]
-        classes = ["Explain:", "Subtasks:", "Code:", "Target States:"]
+        # classes = ["Explain:", "Subtasks:", "Code:", "Target States:"]
+        classes = ["Explain:", "Subtasks:", "Code:"]
         idxs = []
         for c in classes:
             m = processed_message.find(c)
             idxs.append(m)
         if -1 in idxs:
             raise Exception('Invalid response format!')
-        
+    
         # parse process
-        while retry > 0:
-            try:
-                explain = processed_message[:idxs[1]]
-                subtask = processed_message[idxs[1]:idxs[2]]
-                code = processed_message[idxs[2]:idxs[3]]
-                target = processed_message[idxs[3]:]
-                
-                #EXPLAIN
-                explain_str = explain.split('Explain:')[1]
-                explain_str = explain_str.replace('\n', '')
-                explain_str = explain_str.replace('\n\n', '')
-                
-                #SUBTASK
-                subtask_str = subtask.split('Subtasks:')[1]
-                subtask_str = subtask_str.replace('\n\n', '')
-                
-                #CODE
-                code_str = code.split('```javascript\n')[1].split('```')[0]
-                
-                # #TARGET            
-                # inv = target.split('Inventory:')[1]
-                # inv = inv.split('\n')[0]
-                # inv_str = inv.replace(' ', '')
-                # obj_states_2 = []
-                # obj_states_3 = []
-                
-                # objects = target.split('Information:')[1]
-                # objects = objects.split('\n')
-                # for obj in objects:
-                #     obj = obj.split(')')[-1]
-                #     obj_list = obj.split(',')
-                #     for i in range(len(obj_list)):
-                #         obj_list[i] = obj_list[i].replace(' ', '')
-                #     if len(obj_list) == 3:
-                #         obj_states_2.append(obj_list)
-                #     elif len(obj_list) == 4: 
-                #         obj_states_3.append(obj_list)
+        try:
+            explain = processed_message[:idxs[1]]
+            subtask = processed_message[idxs[1]:idxs[2]]
+            code = processed_message[idxs[2]:]
+            # code = processed_message[idxs[2]:idxs[3]]
+            # target = processed_message[idxs[3]:]
+            
+            #EXPLAIN
+            explain_str = explain.split('Explain:')[1]
+            explain_str = explain_str.replace('\n', '')
+            explain_str = explain_str.replace('\n\n', '')
+            
+            #SUBTASK
+            subtask_str = subtask.split('Subtasks:')[1]
+            subtask_str = subtask_str.replace('\n\n', '')
+            
+            #CODE
+            code_str = code.split('```javascript\n')[1].split('```')[0]
+            
+            # #TARGET            
+            # inv = target.split('Inventory:')[1]
+            # inv = inv.split('\n')[0]
+            # inv_str = inv.replace(' ', '')
+            # obj_states_2 = []
+            # obj_states_3 = []
+            
+            # objects = target.split('Information:')[1]
+            # objects = objects.split('\n')
+            # for obj in objects:
+            #     obj = obj.split(')')[-1]
+            #     obj_list = obj.split(',')
+            #     for i in range(len(obj_list)):
+            #         obj_list[i] = obj_list[i].replace(' ', '')
+            #     if len(obj_list) == 3:
+            #         obj_states_2.append(obj_list)
+            #     elif len(obj_list) == 4: 
+            #         obj_states_3.append(obj_list)
 
-                #execute code
-                async_function_regex = re.compile(r'async\s+function\s+(\w+)\s*\(\s*bot\s*\)\s*{')
+            #execute code
+            async_function_regex = re.compile(r'async\s+function\s+(\w+)\s*\(\s*bot\s*\)\s*{')
 
-                # 查找所有匹配的async函数并输出对应的await调用
-                function_name = async_function_regex.findall(code_str)[0]
-                exec_code = f"await {function_name}(bot);"        
-                return {
-                    "explain": explain_str,
-                    "subtask": subtask_str,
-                    "code": code_str,
-                    "exec_code":exec_code
-                    # "inventory": inv_str,
-                    # "obj_2": obj_states_2, 
-                    # "obj_3": obj_states_3,
-                }
-            except Exception as e:
-                retry -= 1
-                error = e
+            # 查找所有匹配的async函数并输出对应的await调用
+            function_name = async_function_regex.findall(code_str)[0]
+            exec_code = f"await {function_name}(bot);"        
+            return {
+                "explain": explain_str,
+                "subtask": subtask_str,
+                "code": code_str,
+                "exec_code":exec_code
+                # "inventory": inv_str,
+                # "obj_2": obj_states_2, 
+                # "obj_3": obj_states_3,
+            }
+        except Exception as e:
+            error = e
         return f"Error parsing response (before program execution): {error}"
 
     # def process_ai_message(self, message):

@@ -30,7 +30,7 @@ class Voyager:
         max_iterations: int = 160,
         reset_placed_if_failed: bool = False,
         action_agent_model_name: str = "gpt-4",
-        action_agent_temperature: float = 0,
+        action_agent_temperature: float = 0.4,
         action_agent_task_max_retries: int = 4,
         action_agent_show_chat_log: bool = True,
         action_agent_show_execution_error: bool = True,
@@ -218,111 +218,169 @@ class Voyager:
             file_path = os.path.join("./data", file_name)
             os.remove(file_path)
 
-        while True:
-            current_data=initial.capture(self.env.send,self.skill_manager.programs+self.prog) #initial pipeline
-            # make the directory
-            sub_save_path = gu.f_mkdir(os.path.join(save_path, f"subtask_{subtask_iter}"))
-            png_files = [f for f in os.listdir("./data") if f.endswith('.png')]
-            for file_name in png_files:
-                source_path = os.path.join("./data", file_name)
-                destination_path = os.path.join(sub_save_path, file_name)
-                shutil.move(source_path, destination_path)
 
-            with open(os.path.join(sub_save_path, "observe.json"),"w+")as f:
-                f.write(json.dumps(current_data))            
+        current_data=initial.capture(self.env.send,self.skill_manager.programs+self.prog) #initial pipeline
+        # make the directory
+        sub_save_path = gu.f_mkdir(os.path.join(save_path, f"subtask_{subtask_iter}"))
+        png_files = [f for f in os.listdir("./data") if f.endswith('.png')]
+        for file_name in png_files:
+            source_path = os.path.join("./data", file_name)
+            destination_path = os.path.join(sub_save_path, file_name)
+            shutil.move(source_path, destination_path)
+
+        with open(os.path.join(sub_save_path, "observe.json"),"w+")as f:
+            f.write(json.dumps(current_data))            
+        
+        # init pipeline for each subtask
+        # while True:
+        #     data = gu.get_finished_task(log_path)
+        #     if gpt_task_name in data.keys():
+        #         return 0
+        #     if os.path.exists(os.path.join(sub_save_path, 'task1.json')):
+        #         break   
+        #     time.sleep(1)
+        # while True:
+        #     statinfo = os.stat(os.path.join(sub_save_path, 'task1.json')) 
+        #     if statinfo.st_size > 0:
+        #         break
             
-            # init pipeline for each subtask
+        # human_info = parse_json.parse_json(path=os.path.join(sub_save_path, "observe.json"))
+
+        # subtask loop, when a subtask is finished, close the loop
+        while True:
+            system_message = self.action_agent.render_system_message()
+            human_message = self.action_agent.render_human_message(current_data,task)
+            content = system_message.content + "\n\n" + human_message.content
+            gu.save_input(sub_save_path, human_message.content)
+            print("start query")
+            
+            # query process
+            succuss = True
+            while succuss:
+                try:
+                    response = self.action_agent.gpt_request(content)
+                    succuss = False
+                except Exception as e:
+                    print(f"Error: {e}")
+                    if "exceeded" in str(e):
+                        print("Sleeping for 3 seconds")
+                        succuss = True
+                        time.sleep(3)
+                    else:
+                        succuss = True
+                        response = {"error_message": str(e)}
+                        print(response)
+            main_succeed = False
+            try:
+                answer =  self.action_agent.process_ai_message(response)
+            except Exception as e:
+                answer = str(e)
+                print(answer)
+            feedback_path = os.path.join(sub_save_path, 'feedback.json')
+            # get feedback from simulator
+            if isinstance(answer, str):
+                subtask = ""
+                code = ""
+                error = answer
+                critic = 'fail'
+                reset = False
+                gu.save_feedback(feedback_path, subtask, code, error, critic, reset, main_succeed)
+            else:
+                if isinstance(answer, dict):
+                    code = answer["code"] + "\n" + answer["exec_code"]
+                    events = self.env.send(
+                        code,
+                        programs=self.skill_manager.programs+self.prog,
+                    )
+                events=json.loads(events.json())
+                success, critique = self.critic_agent.check_task_success(
+                events=events,
+                task=task,
+                context=self.context,
+                chest_observation=self.action_agent.render_chest_observation(),
+                max_retries=5,
+            )    
+            return success,critique
+            #     self.action_agent.record_history(subtask=answer['subtask'], code=answer['code'], error=answer['error'])                
+            #     subtask, code = answer['subtask'], answer['code']
+            #     with open(os.path.join(data_path, f"{gpt_task_name}/subtask_{subtask_iter}/action.py"), 'w') as f:
+            #         f.write(code_headings)
+            #         f.write(code)
+                
+            #     sys.path = list(set(sys.path))
+            #     if subtask_iter != 1:
+            #         sys.path.remove(os.path.join(data_path, f"{gpt_task_name}/subtask_{subtask_iter-1}"))
+            #     sys.path.append(os.path.join(data_path, f"{gpt_task_name}/subtask_{subtask_iter}"))
+            #     import action
+            #     time.sleep(1)
+                
+            #     try:
+            #         reload(action)
+            #         time.sleep(2)
+            #         action.act(robot,env,camera)
+            #         og.log.info("act...")
+            #     except Exception as e:
+            #         error = str(e)
+            #         env.reset()
+                    
+            #         # reset parameters
+            #         robot.inventory = []
+            #         robot.visible_only=True
+            #         subtask = subtask
+            #         code = code
+            #         error = error
+            #         critic = 'fail'
+            #         reset = True
+            #         break
+                
+            # gu.save_response(sub_save_path, answer)
+
+            # success = False
+
+
             # while True:
             #     data = gu.get_finished_task(log_path)
             #     if gpt_task_name in data.keys():
-            #         return 0
-            #     if os.path.exists(os.path.join(sub_save_path, 'task1.json')):
-            #         break   
+            #         return 0               
+            #     if os.path.exists(os.path.join(sub_save_path, 'feedback.json')):
+            #         break
             #     time.sleep(1)
+                
             # while True:
-            #     statinfo = os.stat(os.path.join(sub_save_path, 'task1.json')) 
-            #     if statinfo.st_size > 0:
+            #     feedbackinfo = os.stat(os.path.join(sub_save_path, 'feedback.json')) 
+            #     if feedbackinfo.st_size > 0:
             #         break
                 
-            # human_info = parse_json.parse_json(path=os.path.join(sub_save_path, "observe.json"))
+            # data = gu.get_finished_task(log_path)
+            # if gpt_task_name in data.keys():
+            #     return 0
 
-            # subtask loop, when a subtask is finished, close the loop
-            while True:
-                system_message = self.action_agent.render_system_message()
-                human_message = self.action_agent.render_human_message(current_data,task)
-                content = system_message.content + "\n\n" + human_message.content
-                gu.save_input(sub_save_path, human_message.content)
-                print("start query")
-                
-                # query process
-                succuss = True
-                while succuss:
-                    try:
-                        response = self.action_agent.gpt_request(content)
-                        succuss = False
-                    except Exception as e:
-                        print(f"Error: {e}")
-                        if "exceeded" in str(e):
-                            print("Sleeping for 3 seconds")
-                            succuss = True
-                            time.sleep(3)
-                        else:
-                            succuss = True
-                            response = {"error_message": str(e)}
-                            print(response)
-                
-                try:
-                    answer =  self.action_agent.process_ai_message(response)
-                except Exception as e:
-                    answer = str(e)
-                    print(answer)
-                    
-                gu.save_response(sub_save_path, answer)
-
-                
-                while True:
-                    data = gu.get_finished_task(log_path)
-                    if gpt_task_name in data.keys():
-                        return 0               
-                    if os.path.exists(os.path.join(sub_save_path, 'feedback.json')):
-                        break
-                    time.sleep(1)
-                    
-                while True:
-                    feedbackinfo = os.stat(os.path.join(sub_save_path, 'feedback.json')) 
-                    if feedbackinfo.st_size > 0:
-                        break
-                    
-                data = gu.get_finished_task(log_path)
-                if gpt_task_name in data.keys():
-                    return 0
-
-                with open(os.path.join(sub_save_path, 'feedback.json')) as f:
-                    data = json.load(f) 
-                
-                main_task_flag = data['main_succeed']      
-                if data['critic'] == 'succeed':
-                    print('Task succeed!')
-                    gpt_query.record_history(subtask=data['subtask'], code=data['code'], error=data['error'])
-                    break
-                else:
-                    if data['reset']:
-                        gpt_query.record_history(subtask=answer['subtask'], code=answer['code'], error=data['error'])
-                        break
-                    else:
-                        gpt_query.record_history(subtask=answer['subtask'], code=answer['code'], error=data['error'])
-                        break
+            # with open(os.path.join(sub_save_path, 'feedback.json')) as f:
+            #     data = json.load(f) 
             
-            # reset parameters
-            subtask_iter += 1
+            # main_task_flag = data['main_succeed']      
+            # if data['critic'] == 'succeed':
+            #     print('Task succeed!')
+            #     gpt_query.record_history(subtask=data['subtask'], code=data['code'], error=data['error'])
+            #     break
+            # else:
+            #     if data['reset']:
+            #         gpt_query.record_history(subtask=answer['subtask'], code=answer['code'], error=data['error'])
+            #         break
+            #     else:
+            #         gpt_query.record_history(subtask=answer['subtask'], code=answer['code'], error=data['error'])
+            #         break
+        
+            # # reset parameters
+            # subtask_iter += 1
             
-            #write json
-            if subtask_iter > sub_num - 1:
-                print(f"already attempt {subtask_iter} time, it is too long!")
-                return 0
+            # #write json
+            # if subtask_iter > sub_num - 1:
+            #     print(f"already attempt {subtask_iter} time, it is too long!")
+            #     return 0
 
-            if main_task_flag:    
-                return 0
+            # if main_task_flag:    
+            #     return 0
 
     def sstep(self):
         # if self.action_agent_rollout_num_iter < 0:

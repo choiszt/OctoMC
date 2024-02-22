@@ -21,6 +21,9 @@ async function cal_distance(currentSpotX,currentSpotY,currentSpotZ,targetX,targe
   return distance
 }
 
+function findwhichimage(rotation){
+    
+}
 
 async function find(block_name){
   const current_spot_x=bot.entity.position.x
@@ -57,14 +60,13 @@ try{
   await bot.lookAt(block.position)
   delay(2000)
   const rotation=bot.entity.yaw
-  await bot.look(0,0)
   const distance=await cal_distance(current_spot_x,current_spot_y,current_spot_z,x,y,z)
   bot.chat(`the distance between the bot and the block is ${distance}`)
   bot.chat(`${rotation}`)
   // degree=rad_to_degree(rotation)
-  bot.chat(`the angle towards ${block_name} is ${degree}`)
+  // bot.chat(`the angle towards ${block_name} is ${degree}`)
   
-  return [block,degree,distance]
+  return [block,rotation,distance]
 }}
 catch (error){
   bot.chat(`${error}`)
@@ -77,7 +79,7 @@ function teleport(rot, dis) {
     try {
       //when the rotation is PI, the minecraft shows 0
       await bot.look(rot, 0);
-      delay(3000);
+      delay(2000);
       bot.chat(`now look at ${rot}`);
       x = bot.entity.position.x;
       y = bot.entity.position.y;
@@ -87,6 +89,7 @@ function teleport(rot, dis) {
       x = x + dx;
       z = z + dz;
       bot.chat(`/tp ${x} ${y + 5} ${z}`);
+      delay(2000);
       resolve(); 
     } catch (error) {
       reject(error); 
@@ -98,13 +101,13 @@ function teleport(rot, dis) {
 async function look_around() {
   // yaw = bot.entity.yaw
   yaw = 0
-  for (let index = 0; index < 12; index++) {
+  for (let index = 0; index < 6; index++) {
     await bot.look(yaw, 0);
     await bot.chat(`now look ${yaw}`)
     await delay(1000);
     // await screenshot();
     // 停留一秒钟
-    yaw=yaw+Math.PI/6;
+    yaw=yaw+Math.PI/3;
   }
 }
 
@@ -265,14 +268,5 @@ catch (error){
   bot.chat(`${error}`)
 }
 }
-
-const [block,rotation, distance] =await find("sand") //For GPT pipeline to get the gt rot and dis
-await teleport(1.6,30)
-
-// await delay(5000)
-// // await look_around()
-// signal=await verify(block)
-// bot.chat(`the task success: ${signal}`)
-// // await mineBlock(bot, "sand", 1);
 
 

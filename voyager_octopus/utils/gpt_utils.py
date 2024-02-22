@@ -595,3 +595,13 @@ def get_finished_task(path):
         data = json.load(f)
     return data
     
+def save_feedback(path, subtask, code, error, critic, reset, main_succeed):
+    feedback = {}
+    feedback['subtask'] = subtask
+    feedback['code'] = code
+    feedback['error'] = error
+    feedback['critic'] = critic
+    feedback['reset'] = reset
+    feedback['main_succeed'] = main_succeed
+    with open(path, 'w') as f:
+        f.write(json.dumps(feedback, indent=4))

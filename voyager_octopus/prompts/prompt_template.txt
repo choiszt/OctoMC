@@ -29,7 +29,7 @@ Plan: How to complete the task step by step. You should pay attention to Invento
 Code:
     1) Write an async function taking the bot as the only argument.
     2) Reuse the above useful programs as much as possible.
-				- Use `teleport(rotation,distance)` let the bot look at rotation and walk with in distance
+		- Use `teleport(rotation,distance)` let the bot look at rotation and walk with in distance
         - Use `mineBlock(bot, name, count)` to collect blocks. Do not use `bot.dig` directly.
         - Use `craftItem(bot, name, count)` to craft items. Do not use `bot.craft` or `bot.recipesFor` directly.
         - Use `smeltItem(bot, name count)` to smelt items. Do not use `bot.openFurnace` directly.
@@ -39,67 +39,11 @@ Code:
     4) Functions in the "Code from the last round" section will not be saved or executed. Do not reuse functions listed there.
     5) Anything defined outside a function will be ignored, define all your variables inside your functions.
     6) Call `bot.chat` to show the intermediate progress.
-    7) Use `teleport(rotation,distance)` when you cannot find something. You should frequently call this before mining blocks or killing mobs. 
-    8) `maxDistance` should always be 32 for `bot.findBlocks` and `bot.findBlock`. Do not cheat.
-    9) Do not write infinite loops or recursive functions.
-    10) Do not use `bot.on` or `bot.once` to register event listeners. You definitely do not need them.
-    11) Name your function in a meaningful way (can infer the task from the name).
-	12) Each time you should only give me one subtask (not all) with its corresponding code.
-
+    7) Do not write infinite loops or recursive functions.
+    8) Do not use `bot.on` or `bot.once` to register event listeners. You definitely do not need them.
+    9) Name your function in a meaningful way (can infer the task from the name).
+    10) Each time you should only give me one subtask (not all) with its corresponding code.
+    11) You don't need to call the function by yourself.
 You should only respond in the format as described below:
 RESPONSE FORMAT:
 {response_format}
-Explain: ...
-Subtasks:
-1) ...
-2) ...
-3) ...
-...
-Code:
-```javascript
-// helper functions (only if needed, try to avoid them)
-...
-// main function after the helper functions
-async function yourMainFunctionName(bot) {
-	// await teleport(rotation,distance) #plan1: find the sand and teleport
-}
-```
-
-RESPONSE SAMPLE iter1:
-Explain: Since this is the initial request, there's no prior code to explain or evaluate. The task is to find and mine sand in Minecraft using Mineflayer. I can find a sand block in pic6 at the direction yaw=5.24, and the distance is 28.5 and 28.52.
-
-
-Subtasks:
-1) perceive and go near by the sand block
-2) 
-3) ...
-...
-Code:
-```javascript
-// helper functions (only if needed, try to avoid them)
-...
-// main function after the helper functions
-async function yourMainFunctionName(bot) {
-	// await teleport(yaw=5.24,distance=28.5) #plan1: perceive and go near by the sand block
-}
-```
-
-RESPONSE SAMPLE iter2:
-Explain: Since we have successfully perceive the sand, then we can use the mineBlock function to dig a sand block.
-
-Subtasks:
-1) perceive and go near by the sand block
-2) dig a sand block
-3) ...
-...
-Code:
-```javascript
-// helper functions (only if needed, try to avoid them)
-...
-// main function after the helper functions
-async function yourMainFunctionName(bot) {
-
-	// await teleport(yaw=5.24,distance=28.5) #Subtask1: perceive and go near by the sand block
-	// await mineBlock(bot, "wood", 1); #Subtask2: To collect 1 wood block
-}
-```
