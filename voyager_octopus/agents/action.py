@@ -208,40 +208,7 @@ class OctopusAgent:
         result += " ".join(formatted_blocks)
         return result
 
-    def render_human_message(self, current_data,task):
-
-        # Code from the last round: None
-        # Task Goal: dig a stone
-        # Original Subtasks: None
-        # Previous Action Code: None
-        # Execution Error: None
-        # The rotation and distance of the target block if you use await find("name") function: None
-    #     # FIXME: damage_messages is not used
-    #     damage_messages = []
-    #     assert events[-1][0] == "observe", "Last event must be observe"
-    #     for i, (event_type, event) in enumerate(events):
-    #         if event_type == "onChat":
-    #             chat_messages.append(event["onChat"])
-    #         elif event_type == "onError":
-    #             error_messages.append(event["onError"])
-    #         elif event_type == "onDamage":
-    #             damage_messages.append(event["onDamage"])
-    #         elif event_type == "observe":
-    #             biome = event["status"]["biome"]
-    #             time_of_day = event["status"]["timeOfDay"]
-    #             voxels = event["voxels"]
-    #             entities = event["status"]["entities"]
-    #             health = event["status"]["health"]
-    #             hunger = event["status"]["food"]
-    #             position = event["status"]["position"]
-    #             equipment = event["status"]["equipment"]
-    #             inventory_used = event["status"]["inventoryUsed"]
-    #             inventory = event["inventory"]
-    #             assert i == len(events) - 1, "observe must be the last event"
-
-
-
-
+    def render_human_message(self, current_data,task,critique):
         message = ""    
         pic_info = []
         error_messages = []
@@ -287,10 +254,10 @@ class OctopusAgent:
     #     else:
     #         observation += f"Context: None\n\n"
 
-    #     if critique:
-    #         observation += f"Critique: {critique}\n\n"
-    #     else:
-    #         observation += f"Critique: None\n\n"    
+        if critique:
+            observation += f"Critique: {critique}\n\n"
+        else:
+            observation += f"Critique: None\n\n"    
 
         
         message+=f"Observed Objects:\n"
@@ -309,7 +276,7 @@ class OctopusAgent:
             message += f"Previous Action Code: {self.history_info['code']}\n"
             if error_messages:
                 error = "\n".join(error_messages)
-                message += f"Execution error:\n{error}\n\n"
+                message += f"Execution Error:\n{error}\n\n"
             else:
                 message += f"Execution Error: No error\n"  
             # if len(self.history_info['error']) > 0:
