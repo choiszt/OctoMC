@@ -7,7 +7,7 @@ for day in range(1, 20):
             commit_day = str(day)+' days ago'
             with open('file.txt', 'a')as file:
                 file.write(commit_day)
-            os.system('git add .')
+            os.system('git add just_for_fun.py')
             date_command = f'date -d "{commit_day}" "+%Y-%m-%d %H:%M:%S"'
             commit_date = os.popen(date_command).read().strip()
             commit_command = f'git commit --date="{commit_date}" -m "commit"'
