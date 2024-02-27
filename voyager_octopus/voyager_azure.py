@@ -4,7 +4,7 @@ import os
 import time
 from typing import Dict
 
-import voyager.utils as U
+import voyager_octopus.utils as U
 from .env import VoyagerEnv
 from .agents import ActionAgent,OctopusAgent
 from .agents import CriticAgent,Octopus_CriticAgent

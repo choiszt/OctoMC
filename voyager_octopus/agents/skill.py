@@ -1,14 +1,14 @@
 import os
 
-import voyager.utils as U
+import voyager_octopus.utils as U
 from langchain.chat_models import ChatOpenAI,AzureChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.vectorstores import Chroma
 from langchain.embeddings.azure_openai import AzureOpenAIEmbeddings
 
-from voyager.prompts import load_prompt
-from voyager.control_primitives import load_control_primitives
+from voyager_octopus.prompts import load_prompt
+from voyager_octopus.control_primitives import load_control_primitives
 
 import os
 import openai

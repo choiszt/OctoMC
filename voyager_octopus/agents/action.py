@@ -1,14 +1,14 @@
 import re
 import time
 
-import voyager.utils as U
-from javascript import require
+import voyager_octopus.utils as U
+# from javascript import require
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import SystemMessagePromptTemplate
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
-from voyager.prompts import load_prompt
-from voyager.control_primitives_context import load_control_primitives_context
+from voyager_octopus.prompts import load_prompt
+from voyager_octopus.control_primitives_context import load_control_primitives_context
 import utils.gpt_utils as gu 
 
 import os

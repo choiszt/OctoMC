@@ -4,13 +4,13 @@ import os
 import time
 from typing import Dict
 
-import voyager_octopus.utils as U
+import utils as U
 from env import VoyagerEnv
 from agents import OctopusAgent
 from agents import Octopus_CriticAgent
 from agents import Octopus_CurriculumAgent
 from agents import Octopus_SkillManager
-from agents.choiszt_keyboard import *
+# from agents.choiszt_keyboard import *
 # from .agents.azure_query import gpt_request
 from agents import bot_keyboard
 import utils.gpt_utils as gu 
@@ -129,32 +129,32 @@ class Voyager:
             execution_error=action_agent_show_execution_error,
         )
         self.action_agent_task_max_retries = action_agent_task_max_retries
-        self.curriculum_agent = Octopus_CurriculumAgent(
-            model_name=curriculum_agent_model_name,
-            temperature=curriculum_agent_temperature,
-            qa_model_name=curriculum_agent_qa_model_name,
-            qa_temperature=curriculum_agent_qa_temperature,
-            request_timout=openai_api_request_timeout,
-            ckpt_dir=ckpt_dir,
-            resume=resume,
-            mode=curriculum_agent_mode,
-            warm_up=curriculum_agent_warm_up,
-            core_inventory_items=curriculum_agent_core_inventory_items,
-        )
+        # self.curriculum_agent = Octopus_CurriculumAgent(
+        #     model_name=curriculum_agent_model_name,
+        #     temperature=curriculum_agent_temperature,
+        #     qa_model_name=curriculum_agent_qa_model_name,
+        #     qa_temperature=curriculum_agent_qa_temperature,
+        #     request_timout=openai_api_request_timeout,
+        #     ckpt_dir=ckpt_dir,
+        #     resume=resume,
+        #     mode=curriculum_agent_mode,
+        #     warm_up=curriculum_agent_warm_up,
+        #     core_inventory_items=curriculum_agent_core_inventory_items,
+        # )
         self.critic_agent = Octopus_CriticAgent(
             model_name=critic_agent_model_name,
             temperature=critic_agent_temperature,
             request_timout=openai_api_request_timeout,
             mode=critic_agent_mode,
         )
-        self.skill_manager = Octopus_SkillManager(
-            model_name=skill_manager_model_name,
-            temperature=skill_manager_temperature,
-            retrieval_top_k=skill_manager_retrieval_top_k,
-            request_timout=openai_api_request_timeout,
-            ckpt_dir=skill_library_dir if skill_library_dir else ckpt_dir,
-            resume=True if resume or skill_library_dir else False,
-        )
+        # self.skill_manager = Octopus_SkillManager(
+        #     model_name=skill_manager_model_name,
+        #     temperature=skill_manager_temperature,
+        #     retrieval_top_k=skill_manager_retrieval_top_k,
+        #     request_timout=openai_api_request_timeout,
+        #     ckpt_dir=skill_library_dir if skill_library_dir else ckpt_dir,
+        #     resume=True if resume or skill_library_dir else False,
+        # )
         self.recorder = U.EventRecorder(ckpt_dir=ckpt_dir, resume=resume)
         self.resume = resume
         with open("./basic_move/gpt_pipeline.js")as f:
@@ -249,6 +249,8 @@ class Voyager:
 
             # subtask loop, when a subtask is finished, close the loop
             system_message = self.action_agent.render_system_message()
+            with open("./sample.txt","r")as f:
+                human_message=f.read()
             human_message = self.action_agent.render_human_message(current_data,task,critique=critique)
             content = system_message.content + "\n\n" + human_message.content
             gu.save_input(sub_save_path, human_message.content)
@@ -318,6 +320,16 @@ class Voyager:
                     reset = True
                     break                
 
+    def try_prompt(self,task):
+        while True:
+            system_message = self.action_agent.render_system_message()
+            with open("./sample.txt","r")as f:
+                human_message=f.read()
+        #     human_message = self.action_agent.render_human_message(current_data,task,critique=critique)
+            content = system_message.content + "\n\n" + human_message
+            response = self.action_agent.gpt_request(content)
+            answer =  self.action_agent.process_ai_message(response)
+	    
     def parse_events(self,events):
 
         sub_task_executable=True
@@ -614,3 +626,15 @@ class Voyager:
             print(
                 f"\033[35mFailed tasks: {', '.join(self.curriculum_agent.failed_tasks)}\033[0m"
             )
+
+import openai
+openai.api_type = "azure"
+openai.api_base = "https://voyager.openai.azure.com/"
+openai.api_version = "2023-07-01-preview"
+openai.api_key = "5ea4d624a50a495d9c532bda3665d3de"
+voyager = Voyager(
+    mc_port=36253,
+    openai_api_key=openai.api_key,
+)
+voyager.try_prompt("Mine a wood log")
+# voyager.do_task("Mine a wood log")

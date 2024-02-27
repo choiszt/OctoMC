@@ -8,7 +8,7 @@ import subprocess
 import logging
 import threading
 
-import voyager.utils as U
+import voyager_octopus.utils as U
 
 
 class SubprocessMonitor:
