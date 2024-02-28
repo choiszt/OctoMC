@@ -1,5 +1,5 @@
 import pkg_resources
-import voyager_octopus.utils as U
+import utils as U
 
 
 def load_prompt(prompt):

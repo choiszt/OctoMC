@@ -1,5 +1,5 @@
-from voyager_octopus.prompts import load_prompt
-from voyager_octopus.utils.json_utils import fix_and_parse_json
+from prompts import load_prompt
+from utils.json_utils import fix_and_parse_json
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 

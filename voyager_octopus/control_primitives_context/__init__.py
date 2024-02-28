@@ -1,6 +1,6 @@
 import pkg_resources
 import os
-import voyager_octopus.utils as U
+import utils as U
 
 
 def load_control_primitives_context(primitive_names=None):
