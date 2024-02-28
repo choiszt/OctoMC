@@ -210,8 +210,8 @@ class Voyager:
 
     def do_task(self,task):
         subtask_iter = 1
+        critique='' #the answer from critic agent
         while True:
-            critique='' #the answer from critic agent
             save_path = gu.f_mkdir(os.path.join("./data", task)) #should `ln -s .mincraft/screenshot to ./data` first!!
             log_path="./status.json"
 
@@ -255,22 +255,27 @@ class Voyager:
             print("start query")
             
             # query process
-            succuss = True
-            while succuss:
+            success = True
+            while success:
                 try:
                     response = self.action_agent.gpt_request(content)
                     answer =  self.action_agent.process_ai_message(response)
-                    succuss = False
+                    if len(answer['code'].split("Subtask"))>2: #more than one subtask
+                        self.action_agent.record_history(subtask=answer['subtask'], code=answer['code'],error='Your code has more than one Subtask')
+                        human_message = self.action_agent.render_human_message(current_data,task,critique=critique)
+                        continue
+                    success = False
+                    print(response)
                 except Exception as e:
                     answer = str(e)
                     print(answer)
                     # print(f"Error: {e}")
                     # if "exceeded" in str(e):
                     #     print("Sleeping for 3 seconds")
-                    #     succuss = True
+                    #     success = True
                     #     time.sleep(3)
                     # else:
-                    #     succuss = True
+                    #     success = True
                     #     response = {"error_message": str(e)}
                     #     print(response)
             main_succeed = False
@@ -302,21 +307,22 @@ class Voyager:
                     reset = False
                     self.action_agent.record_history(subtask=answer['subtask'], code=answer['code'])
                     success, critique = self.critic_agent.check_task_success(
-                events=events,
-                task=task,
-                context=self.context,
-                chest_observation=self.action_agent.render_chest_observation(),
-                max_retries=5,
-            )   
+                        events=events,
+                        task=task,
+                        context=self.context,
+                        chest_observation=self.action_agent.render_chest_observation(),
+                        max_retries=5,
+                    )   
                 if success: #main_task success
                     print(f"{task} success! Congrats!")
                     break
-                else:
-                    subtask = subtask
-                    error = error
-                    critic = 'fail'
-                    reset = True
-                    break                
+                subtask_iter+=1
+                # else:
+                #     subtask = subtask
+                #     error = error
+                #     critic = 'fail'
+                #     reset = True
+                #     break                
 
     def parse_events(self,events):
 

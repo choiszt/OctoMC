@@ -61,10 +61,10 @@ class Octopus_CriticAgent:
 
         observation += f"Time: {time_of_day}\n\n"
 
-        if voxels:
-            observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
-        else:
-            observation += f"Nearby blocks: None\n\n"
+        # if voxels:
+        #     observation += f"Nearby blocks: {', '.join(voxels)}\n\n"
+        # else:
+        #     observation += f"Nearby blocks: None\n\n"
 
         observation += f"Health: {health:.1f}/20\n\n"
         observation += f"Hunger: {hunger:.1f}/20\n\n"

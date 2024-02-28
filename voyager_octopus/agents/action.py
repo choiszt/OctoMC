@@ -52,9 +52,10 @@ class OctopusAgent:
 
     def gpt_request(self,content):
         response = openai.ChatCompletion.create(
+            model="gpt-4-0125-preview",
             engine="voyager",
             messages = [{"role":"user","content":content}],
-            temperature=0.7,
+            temperature=0.6,
             max_tokens=800,
             top_p=0.95,
             frequency_penalty=0,
@@ -185,6 +186,9 @@ class OctopusAgent:
         pattern = r"{(.*?)}"
         
         obj_with_dis = re.search(pattern, info).group(1)
+        if len(obj_with_dis)==0:
+            result='None'
+            return result
         items = obj_with_dis.split(',')
         block_dict = {}
         for i in range(0, len(items), 2):
@@ -210,6 +214,7 @@ class OctopusAgent:
 
     def render_human_message(self, current_data,task,critique):
         message = ""    
+        error=""
         pic_info = []
         error_messages = []
         # FIXME: damage_messages is not used
@@ -254,10 +259,10 @@ class OctopusAgent:
     #     else:
     #         observation += f"Context: None\n\n"
 
-        if critique:
-            observation += f"Critique: {critique}\n\n"
+        if critique: #TODO the usage of critique
+            message += f"Critique: {critique}\n\n"
         else:
-            observation += f"Critique: None\n\n"    
+            message += f"Critique: None\n\n"    
 
         
         message+=f"Observed Objects:\n"
@@ -274,11 +279,15 @@ class OctopusAgent:
 
         if len(self.history_info['code']) > 0:
             message += f"Previous Action Code: {self.history_info['code']}\n"
-            if error_messages:
-                error = "\n".join(error_messages)
-                message += f"Execution Error:\n{error}\n\n"
-            else:
+
+            if self.history_info['error']: # planning error
+                error = self.history_info['error']
+            if error_messages: # simulator error
+                error += "\n".join(error_messages)
+            if len(self.history_info['error'])==0 and len(error_messages)==0:
                 message += f"Execution Error: No error\n"  
+            else:
+                message += f"Execution Error:\n{error}\n\n"
             # if len(self.history_info['error']) > 0:
             #     message += f"Execution Error:{self.history_info['error']}\n"
             # else:

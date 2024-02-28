@@ -188,7 +188,7 @@ async function look_around() {
     bot.chat(`pic${index+1}:{${Array.from(blockinfo)}},yaw:${yaw.toFixed(2)}`)
     await bot.look(yaw, 0);
     await delay(1000);
-    // await screenshot();
+    await screenshot();
     // 停留一秒钟
     yaw=yaw+Math.PI/3;
   }

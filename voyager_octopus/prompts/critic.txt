@@ -6,7 +6,6 @@ I will give you the following information:
 
 Biome: The biome after the task execution.
 Time: The current time.
-Nearby blocks: The surrounding blocks. These blocks are not collected yet. However, this is useful for some placing or planting tasks.
 Health: My current health.
 Hunger: My current hunger level. For eating task, if my hunger level is 20.0, then I successfully ate the food.
 Position: My current position.
@@ -64,15 +63,13 @@ RESPONSE:
 INPUT:
 Biome: plains
 
-Nearby blocks: stone, dirt, grass_block, grass, farmland, wheat
-
-Inventory (26/36): ...
+Inventory (26/36):  stone, dirt, grass_block, grass, farmland, wheat...
 
 Task:  Plant 1 wheat seed.
 
 RESPONSE:
 {
-    "reasoning": "For planting tasks, inventory information is useless. In nearby blocks, there is farmland and wheat, which means you succeed to plant the wheat seed.",
+    "reasoning": "For planting tasks, inventory information is useless. In inventory, there is farmland and wheat, which means you succeed to plant the wheat seed.",
     "success": true,
     "critique": ""
 }
@@ -108,7 +105,6 @@ RESPONSE
 }
 
 INPUT:
-Nearby blocks: chest
 
 Inventory (28/36): {'rail': 1, 'coal': 2, 'oak_planks': 13, 'copper_block': 1, 'diorite': 7, 'cooked_beef': 4, 'granite': 22, 'cobbled_deepslate': 23, 'feather': 4, 'leather': 2, 'cooked_chicken': 3, 'white_wool': 2, 'stick': 3, 'black_wool': 1, 'stone_sword': 2, 'stone_hoe': 1, 'stone_axe': 2, 'stone_shovel': 2, 'cooked_mutton': 4, 'cobblestone_wall': 18, 'crafting_table': 1, 'furnace': 1, 'iron_pickaxe': 1, 'stone_pickaxe': 1, 'raw_copper': 12}
 

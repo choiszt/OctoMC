@@ -10,7 +10,7 @@ Code:
 ...
 // main function after the helper functions
 async function yourMainFunctionName(bot) {
-	// await teleport(rotation,distance) #plan1: find the sand and teleport
+	// await teleport(yaw,distance) #plan1: find the sand and teleport
 }
 ```
 
@@ -38,7 +38,7 @@ Explain: Since we have successfully teleport nearby dark_oak_log. We will use th
 
 Subtasks:
 1) Perceive and teleport near the dark_oak_log.
-2) Mine 1 dark_oak_log.
+2) Mine 3 dark_oak_log.
 3) ...
 ...
 Code:
@@ -48,9 +48,9 @@ Code:
 // Main function
 async function mineWoodLog(bot) {
 	
-  // Subtask 2: Mine 1 dark_oak_log
+  // Subtask 2: Mine 3 dark_oak_log
   await bot.chat("Mining wood log...");
-  await mineBlock(bot, "dark_oak_log", 1); // To collect 1 dark_oak_log
+  await mineBlock(bot, "dark_oak_log", 3); // To collect 3 dark_oak_log
 }
 
 ```
