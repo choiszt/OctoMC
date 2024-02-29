@@ -50,13 +50,14 @@ class OctopusAgent:
         self.history_info={}
         self.record_history()
 
-    def gpt_request(self,content):
+    def gpt_request(self,system_content, human_content):
         response = openai.ChatCompletion.create(
-            model="gpt-4-0125-preview",
+            model="gpt-4-0314",
             engine="voyager",
-            messages = [{"role":"user","content":content}],
+            messages = [{"role":"system","content":system_content},
+                        {"role":"user", "content":human_content}],
             temperature=0.6,
-            max_tokens=800,
+            max_tokens=1500,
             top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,
@@ -181,8 +182,8 @@ class OctopusAgent:
         result=''
         pattern = r"pic(\d+)"
         result += f'{re.search(pattern, info).group(0)}\n'
-        pattern = r"yaw:\d+\.\d+"
-        result+=f'direction={re.search(pattern, info).group(0)}\n'
+        pattern = r"yaw=\d+\.\d+"
+        result+=f'{re.search(pattern, info).group(0)}\n'
         pattern = r"{(.*?)}"
         
         obj_with_dis = re.search(pattern, info).group(1)
@@ -242,36 +243,17 @@ class OctopusAgent:
                 assert i == len(current_data) - 1, "observe must be the last event"
 
 
-
-    #     observation += f"Equipment: {equipment}\n\n"
-
-
-    #     if not (
-    #         task == "Place and deposit useless items into a chest"
-    #         or task.startswith("Deposit useless items into the chest at")
-    #     ):
-    #         observation += self.render_chest_observation()
-
-    #     observation += f"Task: {task}\n\n"
-
-    #     if context:
-    #         observation += f"Context: {context}\n\n"
-    #     else:
-    #         observation += f"Context: None\n\n"
-
-        if critique: #TODO the usage of critique
-            message += f"Critique: {critique}\n\n"
-        else:
-            message += f"Critique: None\n\n"    
-
-        
         message+=f"Observed Objects:\n"
         for info in pic_info:
             message+=f"{self.parse_picinfo(info)}\n"
 
         message += f"Task Goal: {task}\n"
         
-        
+        if critique: #TODO the usage of critique
+            message += f"Critique: {critique}\n\n"
+        else:
+            message += f"Critique: None\n\n"    
+
         if len(self.history_info['subtask']) > 0:
             message += f"Original Subtasks: {self.history_info['subtask']}\n"
         else:
@@ -296,10 +278,10 @@ class OctopusAgent:
             message += f"Previous Action Code: No code\n"
             message += f"Execution error: No error\n"
 
-        if inventory:
-            message += f"Inventory: {inventory}\n"
-        else:
-            message += f"Inventory: Empty\n"
+        # if inventory:
+        #     message += f"Inventory: {inventory}\n"
+        # else:
+        #     message += f"Inventory: Empty\n"
         # message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should give me just one subtask each turn and can only use the functions provided above and pay attention to the response format."
         message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn ."    
         return HumanMessage(content=message)

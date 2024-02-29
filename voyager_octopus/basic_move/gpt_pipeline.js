@@ -185,7 +185,7 @@ async function look_around() {
   for (let index = 0; index < 6; index++) {
     // bot.chat(`${bot.entity.yaw}`)
     blockinfo=get_see_SurroundingBlocks(bot, Math.abs(Math.floor(100*Math.sin(bot.entity.yaw))), 2, Math.abs(Math.floor(100*Math.cos(bot.entity.yaw))))
-    bot.chat(`pic${index+1}:{${Array.from(blockinfo)}},yaw:${yaw.toFixed(2)}`)
+    bot.chat(`pic${index+1}:{${Array.from(blockinfo)}},yaw=${yaw.toFixed(2)}`)
     await bot.look(yaw, 0);
     await delay(1000);
     await screenshot();

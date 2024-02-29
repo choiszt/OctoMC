@@ -19,7 +19,7 @@ def capture(send,programs):
     return json.loads((send(code,programs)).json())
 
 def initial(send,programs):
-    command=f"bot.chat('/execute as bot at @s run tp @s -270 64 251');"
+    command=f"bot.chat('/execute as bot at @s run tp @s 590 93 852');"
     send(command,programs=programs)
 
 def move(send,programs):

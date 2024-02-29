@@ -12,7 +12,7 @@ azure_login = {
 from agents.choiszt_keyboard import change_gamemode
 # change_gamemode("spectator")
 voyager = Voyager(
-    mc_port=36253,
+    mc_port=32769,
     openai_api_key=openai.api_key,
 )
 
