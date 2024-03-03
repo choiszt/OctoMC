@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The task is to kill a chicken. We have already approached the chicken. Now we need to kill it.",
-        "subtask": "\n1) Kill the chicken",
-        "code": "async function killChicken(bot) {\n  // Subtask 2: Kill the chicken\n  await bot.chat(\"Killing the chicken...\");\n  await killMob(bot, \"chicken\", 5000); // To kill a chicken with a timeout of 5 seconds\n}\n",
-        "exec_code": "await killChicken(bot);"
-    }
-}

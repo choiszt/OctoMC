@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Perceive and go near the cow.\n",
-    "code": "async function killCows(bot) {\n    // Subtask 1: Perceive and go near the cow\n    await bot.chat(\"Finding cows...\");\n    await teleport(0.00, 17.9); // Teleport to the location where the cow is\n}\n\nawait killCows(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

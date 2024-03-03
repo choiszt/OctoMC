@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Approach the panda in pic1.",
-    "code": "async function killPanda(bot) {\n  // Subtask 1: Approach the panda in pic1\n  await bot.chat(\"Approaching the panda...\");\n  await teleport(0.00, 17.9); // Teleport to the location of the panda\n}\n\nawait killPanda(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

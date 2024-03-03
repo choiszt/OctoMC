@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Perceive and go near the sand block in pic1.\n2) Mine a sand block.\n3) ...",
-    "code": "async function mineSand(bot) {\n\t// Subtask 2: Mine 3 sand block\n\tawait bot.chat(\"Mining a sand block...\");\n\tawait mineBlock(bot, \"sand\", 3); // To collect 3 sand block\n}\n\nawait mineSand(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": true
-}

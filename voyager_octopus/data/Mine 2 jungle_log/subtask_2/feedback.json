@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Mine 2 jungle logs.",
-    "code": "async function mineJungleLog(bot) {\n  // Subtask 1: Mine 2 jungle logs\n  await bot.chat(\"Mining jungle logs...\");\n  await mineBlock(bot, \"jungle_log\", 2); // To collect 2 jungle logs\n}\n\nawait mineJungleLog(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": true
-}

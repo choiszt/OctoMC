@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Place a furnace.\n2) Smelt the chicken.",
-    "code": "async function smeltChicken(bot) {\n  // Subtask 2: Smelt the chicken\n  await bot.chat(\"Smelting the chicken...\");\n  await smeltItem(bot, \"cooked_chicken\", \"coal\", 1);\n}\n\nawait smeltChicken(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": true
-}

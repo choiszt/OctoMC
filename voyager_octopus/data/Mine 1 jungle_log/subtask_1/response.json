@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The task is to mine 1 jungle_log. I have observed a jungle_log in pic1 at the direction yaw=0. The distance to the jungle_log is 10.51. ",
-        "subtask": "\n1) Perceive and go near the jungle_log.\n2) Mine the jungle_log.",
-        "code": "async function mineJungleLog(bot) {\n  // Subtask 1: Perceive and go near the jungle_log\n  await bot.chat(\"Going near the jungle_log...\");\n  await teleport(0, 10.51);\n}\n",
-        "exec_code": "await mineJungleLog(bot);"
-    }
-}

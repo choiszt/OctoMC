@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The task is to mine 1 stone block in Minecraft. I can perceive stone blocks at different distances and angles in the environment.",
-        "subtask": "\n1) Perceive and teleport near the stone block.\n2) Mine 1 stone block.",
-        "code": "async function mineStone(bot) {\n  // Subtask 1: Perceive and teleport near the stone block\n  await bot.chat(\"Teleporting near the stone block...\");\n  await teleport(0.00, 1.22); // Teleport to the stone block at yaw=0.00, distance=1.22\n}\n",
-        "exec_code": "await mineStone(bot);"
-    }
-}

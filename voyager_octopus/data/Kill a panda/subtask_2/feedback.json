@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Kill the panda in pic1.",
-    "code": "async function killPanda(bot) {\n  // Subtask 2: Kill the panda in pic1\n  await bot.chat(\"Killing the panda...\");\n  await killMob(bot, \"panda\", 30000); // Kill the panda within a timeout of 30 seconds\n}\n\nawait killPanda(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": true
-}

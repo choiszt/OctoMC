@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The goal is to mine a stone and place it nearby. We have observed stones at different locations. We can approach one of the stones and mine it. After mining the stone, we can place it nearby. We currently have an iron axe in our inventory.",
-        "subtask": "\n1) Teleport near the stone block.\n2) Mine the stone block.\n3) Place the stone block nearby.",
-        "code": "async function mineAndPlaceStone(bot) {\n  // Subtask 1: Teleport near the stone block\n  await teleport(0.00, 1.22);\n}\n",
-        "exec_code": "await mineAndPlaceStone(bot);"
-    }
-}

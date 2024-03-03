@@ -1,3 +1,0 @@
-{
-    "input": "Observed Objects:\npic1\nyaw=0.00\nsand(1.22,1.22)\npic2\nyaw=1.57\noak_log(24.99,25.19) oak_fence(24.91,24.93) sand(1.22,1.22)\npic3\nyaw=3.14\noak_log(24.99,25.19) oak_fence(24.91,24.93) sand(1.22,1.22)\npic4\nyaw=4.71\nsand(1.22,1.22)\nTask Goal: Mine 1 sand and Smelt\nCritique: None\n\nOriginal Subtasks: None\nPrevious Action Code: No code\nExecution error: No error\nInventory: Empty\nNow, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn. Just give me one subtask at each turn"
-}

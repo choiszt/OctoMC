@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The next subtask is to place a furnace in order to smelt the porkchop. We have a furnace in our inventory, so we can use that.",
-        "subtask": "\n1) Place a furnace",
-        "code": "async function smeltPorkchop(bot) {\n    // Subtask 1: Place a furnace\n    await bot.chat(\"Placing a furnace...\");\n    await placeItem(bot, \"furnace\", bot.entity.position);\n}\n",
-        "exec_code": "await smeltPorkchop(bot);"
-    }
-}

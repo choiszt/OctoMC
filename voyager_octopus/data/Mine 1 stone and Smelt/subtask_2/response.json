@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The bot has successfully teleported near the stone block. Now, we need to mine the stone block.",
-        "subtask": "\n1) Mine the stone block",
-        "code": "// Main function\nasync function mineAndSmeltStone(bot) {\n  // Subtask 2: Mine the stone block\n  await bot.chat(\"Mining the stone block...\");\n  await mineBlock(bot, \"stone\", 1); // To collect 1 stone\n}\n",
-        "exec_code": "await mineAndSmeltStone(bot);"
-    }
-}

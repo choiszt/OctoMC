@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Teleport and search for pigs in different directions\n2) Kill the first pig\n3) Kill the second pig",
-    "code": "async function killPigs(bot) {\n  // Subtask 1: Teleport and search for pigs in different directions\n  await bot.chat(\"Searching for pigs...\");\n  await teleport(yaw=0, distance=30);\n}\n\nawait killPigs(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Teleport near the stone block\n2) Mine the stone block\n3) Smelt the stone",
-    "code": "async function mineAndSmeltStone(bot) {\n  // Subtask 1: Teleport near the stone block\n  await teleport(0.00, 7.58);\n}\n\nawait mineAndSmeltStone(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

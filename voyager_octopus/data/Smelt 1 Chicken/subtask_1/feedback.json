@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Place a furnace",
-    "code": "async function smeltChicken(bot) {\n  // Subtask 1: Place a furnace\n  await bot.chat(\"Placing a furnace...\");\n  const position = bot.entity.position.offset(1, 0, 0); // Offset the position to the right of the bot\n  await placeItem(bot, \"furnace\", position);\n}\n\nawait smeltChicken(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

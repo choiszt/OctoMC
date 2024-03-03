@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The bot has successfully completed the first subtask of perceiving and going near the sand block in pic1. The next subtask is to mine a sand block.",
-        "subtask": "\n1) Perceive and go near the sand block in pic1.\n2) Mine 3 sand block.\n3) ...",
-        "code": "async function mineSand(bot) {\n\t// Subtask 2: Mine 3 sand block\n\tawait bot.chat(\"Mining a sand block...\");\n\tawait mineBlock(bot, \"sand\", 3); // To collect 3 sand block\n}\n",
-        "exec_code": "await mineSand(bot);"
-    }
-}

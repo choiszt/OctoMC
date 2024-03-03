@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Perceive and teleport near the llama\n2) Kill the llama",
-    "code": "async function killLlama(bot) {\n  // Subtask 1: Perceive and teleport near the llama\n  await bot.chat(\"Teleporting near the llama...\");\n  await teleport(0.00, 18.18); \n}\n\nawait killLlama(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

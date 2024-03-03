@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Approach the chicken\n2) Kill the chicken",
-    "code": "async function killChicken(bot) {\n  // Subtask 1: Approach the chicken\n  await teleport(0, 17.9); // Approach the chicken at yaw=0 and distance=17.9\n}\n\nawait killChicken(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

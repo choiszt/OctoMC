@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Teleport near the sand block in pic1 or pic2.\n2) Mine 2 sand blocks.",
-    "code": "async function mineSand(bot) {\n  // Subtask 1: Teleport near the sand block in pic1 or pic2\n  await teleport(0.00, 17.22); // Teleport to the sand block at distance 17.22 in pic1\n}\n\nawait mineSand(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

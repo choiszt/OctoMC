@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Teleport to a nearby location with oak logs.",
-    "code": "async function mineWoodLog(bot) {\n  // Subtask 1: Teleport to a nearby location with oak logs\n  await teleport(0.00, 10.12); // Teleport towards the oak logs at yaw=0.00 in pic1\n}\n\nawait mineWoodLog(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

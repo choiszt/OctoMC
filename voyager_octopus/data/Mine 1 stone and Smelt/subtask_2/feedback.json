@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Mine the stone block",
-    "code": "await mineBlock(bot, 'stone', 1);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

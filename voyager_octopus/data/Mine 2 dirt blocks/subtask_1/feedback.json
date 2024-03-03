@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Teleport and approach the dirt block in pic3.\n2) Mine the dirt block.\n3) ...",
-    "code": "async function mineDirt(bot) {\n   // Subtask 1: Teleport and approach the dirt block in pic3\n   await bot.chat(\"Approaching the dirt block...\");\n   await teleport(3.14, 1.22);  \n}\n\nawait mineDirt(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

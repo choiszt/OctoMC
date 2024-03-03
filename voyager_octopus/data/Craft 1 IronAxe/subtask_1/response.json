@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The current task is to Craft 1 IronAxe. To complete this task, we need to place a crafting table nearby. We have a crafting table in our inventory, so we can use it to place it down.",
-        "subtask": "\n1) Place a crafting table nearby.",
-        "code": "async function craftIronAxe(bot) {\n  // Subtask 1: Place a crafting table nearby\n  await bot.chat(\"Placing a crafting table...\");\n  const craftingTableName = \"crafting_table\";\n  const position = bot.entity.position.offset(0, 0, -1); // Offset the position by 1 block in the negative Z direction\n  await placeItem(bot, craftingTableName, position);\n}\n",
-        "exec_code": "await craftIronAxe(bot);"
-    }
-}

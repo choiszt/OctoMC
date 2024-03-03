@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The current task is to smelt 1 chicken. The bot needs to perform the following subtasks:1) Place a furnace.2) Smelt the chicken.",
-        "subtask": "\n1) Place a furnace.\n2) Smelt the chicken.",
-        "code": "async function smeltChicken(bot) {\n  // Subtask 2: Smelt the chicken\n  await bot.chat(\"Smelting the chicken...\");\n  await smeltItem(bot, \"cooked_chicken\", \"coal\", 1);\n}\n",
-        "exec_code": "await smeltChicken(bot);"
-    }
-}

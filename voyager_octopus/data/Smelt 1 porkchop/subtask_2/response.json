@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " The next subtask is to smelt 1 porkchop. We already have a furnace placed. The inventory has 6 porkchops and 10 coal.",
-        "subtask": "\n1) Smelt 1 porkchop",
-        "code": "async function smeltPorkchop(bot) {\n    // Subtask 2: Smelt 1 porkchop\n    await bot.chat(\"Smelting porkchop...\");\n    await smeltItem(bot, \"porkchop\", \"coal\", 1);\n}\n",
-        "exec_code": "await smeltPorkchop(bot);"
-    }
-}

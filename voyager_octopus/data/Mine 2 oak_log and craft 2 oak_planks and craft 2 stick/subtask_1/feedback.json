@@ -1,8 +1,0 @@
-{
-    "subtask": "\n1) Perceive and teleport near the oak_log in pic1\n2) Mine 2 oak_log\n3) Craft 2 oak_planks\n4) Craft 2 sticks",
-    "code": "async function mineAndCraft(bot) {\n    // Subtask 1: Perceive and teleport near the oak_log in pic1\n    await bot.chat(\"Teleporting near oak_log...\");\n    await teleport(0, 11.77); // Teleport to the oak_log in pic1\n}\n\nawait mineAndCraft(bot);",
-    "error": "Execution Error: No error\n",
-    "critic": "succeed",
-    "reset": false,
-    "main_succeed": false
-}

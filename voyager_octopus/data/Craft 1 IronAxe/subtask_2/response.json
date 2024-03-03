@@ -1,8 +1,0 @@
-{
-    "response": {
-        "explain": " We have already placed a crafting table nearby. The next subtask is to Craft 1 IronAxe. We currently have 10 sticks and 10 iron ingots in our inventory.",
-        "subtask": "\n1) Craft 1 IronAxe",
-        "code": "// Main function\nasync function craftIronAxe(bot) {\n  // Subtask 1: Craft 1 IronAxe\n  await bot.chat(\"Crafting IronAxe...\");\n  await craftItem(bot, \"iron_axe\", 1);\n}\n",
-        "exec_code": "await craftIronAxe(bot);"
-    }
-}
