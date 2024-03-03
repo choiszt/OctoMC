@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " We need to mine 3 sand blocks in Minecraft. The sand blocks can be found in pic1 at the direction yaw=0.00 and the distances are 17.22 and 17.45.",
+        "subtask": "\n1) Perceive and go near the sand block in pic1.\n2) Mine a sand block.\n3) ...\n...\n",
+        "code": "async function mineSand(bot) {\n\t// Subtask 1: Perceive and go near the sand block in pic1\n\tawait teleport(0.00, 17.22); // Look at yaw=0.00 and walk within 17.22 distance\n}\n",
+        "exec_code": "await mineSand(bot);"
+    }
+}

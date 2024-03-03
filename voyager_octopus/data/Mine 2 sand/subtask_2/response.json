@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The bot's current task is to mine 2 sand blocks in the nearby beach biome using an iron pickaxe. The bot has already teleported near the sand block in pic1 or pic2. The inventory shows that the bot has an iron pickaxe.",
+        "subtask": "\n1) Mine 2 sand blocks.",
+        "code": "// Main function\nasync function mineSand(bot) {\n  // Subtask 1: Mine 2 sand blocks\n  await bot.chat(\"Mining sand...\");\n  await mineBlock(bot, \"sand\", 2); // To collect 2 sand blocks\n}\n",
+        "exec_code": "await mineSand(bot);"
+    }
+}

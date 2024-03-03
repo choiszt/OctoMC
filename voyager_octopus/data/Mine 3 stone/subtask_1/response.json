@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The task is to mine 3 stone blocks in Minecraft. The bot is currently facing the direction of yaw=4.71, and there are stone blocks at distances 1.22, 1.22, and 1.87 in pic4.",
+        "subtask": "\n1) Perceive and go near the stone block\n2) Mine a stone block\n3) ...",
+        "code": "async function mineStone(bot) {\n  // Subtask 1: Perceive and go near the stone block\n  await teleport(4.71, 1.22); \n}\n",
+        "exec_code": "await mineStone(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " To craft an oak boat, we need to first place a crafting table nearby. The bot currently has 1 crafting table in its inventory.",
+        "subtask": "\n1) Place a crafting table nearby.",
+        "code": "// Main function\nasync function craftOakBoat(bot) {\n  // Subtask 1: Place a crafting table nearby\n  await bot.chat(\"Placing a crafting table...\");\n  await placeItem(bot, \"crafting_table\", bot.entity.position);\n}\n",
+        "exec_code": "await craftOakBoat(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Place a crafting table nearby.",
+    "code": "async function craftChest(bot) {\n    // Subtask 1: Place a crafting table nearby\n    await bot.chat(\"Placing a crafting table...\");\n    const position = bot.entity.position.offset(2, 0, 0); // Offset the position to the right of the bot\n    await placeItem(bot, \"crafting_table\", position);\n}\n\nawait craftChest(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

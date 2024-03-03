@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The task is to mine 1 sand block and smelt it. We can find a sand block at yaw=0.00 and distance 1.22.",
+        "subtask": "\n1) Perceive and go near the sand block.\n2) Mine the sand block.\n3) Smelt the sand.",
+        "code": "async function mineAndSmeltSand(bot) {\n  // Subtask 1: Perceive and go near the sand block\n  await bot.chat(\"Heading towards the sand block...\");\n  await teleport(0.00, 1.22);\n}\n",
+        "exec_code": "await mineAndSmeltSand(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Mine 4 oak logs\n2) ...",
+    "code": "// Main function\nasync function mineOakLogs(bot) {\n  // Subtask 1: Mine 4 oak logs\n  await bot.chat(\"Mining oak logs...\");\n  await mineBlock(bot, \"oak_log\", 4); // To collect 4 oak logs\n}\n\nawait mineOakLogs(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The task is to mine 4 dirt blocks in Minecraft. We can see dirt blocks in pic1 at distance 17.93 and in pic3 at distance 10.79.",
+        "subtask": "\n1) Teleport to the dirt block in pic1\n2) Mine the dirt block",
+        "code": "async function mineDirtBlock(bot) {\n  // Subtask 1: Teleport to the dirt block in pic1\n  await bot.chat(\"Teleporting to the dirt block...\");\n  await teleport(0, 17.93);\n}\n",
+        "exec_code": "await mineDirtBlock(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Perceive and go near the sand block in pic1.\n2) Mine a sand block.\n3) ...\n...\n",
+    "code": "async function mineSand(bot) {\n\t// Subtask 1: Perceive and go near the sand block in pic1\n\tawait teleport(0.00, 17.22); // Look at yaw=0.00 and walk within 17.22 distance\n}\n\nawait mineSand(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

@@ -1,0 +1,3 @@
+{
+    "input": "Observed Objects:\npic1\nyaw=0.00\nstone(1.22,1.87) gravel(11.51,12.19) coal_ore(4.64)\npic2\nyaw=1.57\nstone(1.22,1.22) gravel(11.51,12.19)\npic3\nyaw=3.14\nstone(1.22,1.22) glow_lichen(7.18)\npic4\nyaw=4.71\nstone(1.22,1.22) coal_ore(4.64) glow_lichen(7.18)\nTask Goal: Mine 4 stone\nCritique: None\n\nOriginal Subtasks: None\nPrevious Action Code: No code\nExecution error: No error\nInventory: {'iron_pickaxe': 1}\nNow, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn. Just give me one subtask at each turn"
+}

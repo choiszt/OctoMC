@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Craft 2 chests using the crafting table.",
+    "code": "// Main function\nasync function craftChest(bot) {\n    // Subtask 2: Craft 2 chests\n    await bot.chat(\"Crafting 2 chests...\");\n    await craftItem(bot, \"chest\", 2); // To craft 2 chests\n}\n\nawait craftChest(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": true
+}

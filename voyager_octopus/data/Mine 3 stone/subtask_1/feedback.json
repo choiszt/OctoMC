@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Perceive and go near the stone block\n2) Mine a stone block\n3) ...",
+    "code": "async function mineStone(bot) {\n  // Subtask 1: Perceive and go near the stone block\n  await teleport(4.71, 1.22); \n}\n\nawait mineStone(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

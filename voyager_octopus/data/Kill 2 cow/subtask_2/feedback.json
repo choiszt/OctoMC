@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Kill the first cow.\n2) Kill the second cow.",
+    "code": "// Main function\nasync function killCows(bot) {\n\n    // Subtask 2: Kill the first cow\n    await bot.chat(\"Killing the first cow...\");\n    await killMob(bot, \"cow\", 10); // Kill the cow within 10 seconds\n\n}\n\nawait killCows(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

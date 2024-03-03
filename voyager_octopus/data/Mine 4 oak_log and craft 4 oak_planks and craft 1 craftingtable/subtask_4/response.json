@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The current goal is to craft a crafting table. The previous subtask was to craft 4 oak planks, which has been completed successfully. The next subtask is to craft a crafting table using the oak planks.",
+        "subtask": "\n1) Craft a crafting table",
+        "code": "// Main function\nasync function craftCraftingTable(bot) {\n  // Subtask 1: Craft a crafting table\n  await bot.chat(\"Crafting a crafting table...\");\n  await craftItem(bot, \"crafting_table\", 1); // To craft a crafting table\n}\n",
+        "exec_code": "await craftCraftingTable(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " Since the goal is to craft 2 chests, we need to have a crafting table nearby to perform the crafting. The previous subtask was to place a crafting table nearby, and it has been successfully completed without any errors. The current inventory shows that we have 3 crafting tables available.",
+        "subtask": "\n1) Craft 2 chests using the crafting table.",
+        "code": "// Main function\nasync function craftChest(bot) {\n    // Subtask 2: Craft 2 chests\n    await bot.chat(\"Crafting 2 chests...\");\n    await craftItem(bot, \"chest\", 2); // To craft 2 chests\n}\n",
+        "exec_code": "await craftChest(bot);"
+    }
+}

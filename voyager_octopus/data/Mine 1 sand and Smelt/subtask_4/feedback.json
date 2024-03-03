@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Smelt the sand in the furnace.",
+    "code": "async function mineAndSmeltSand(bot) {\n  // Subtask 4: Smelt the sand in the furnace\n  await bot.chat(\"Smelting the sand...\");\n  await smeltItem(bot, \"sand\", \"coal\", 1); // Smelt 1 sand using coal as fuel\n}\n\nawait mineAndSmeltSand(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": true
+}

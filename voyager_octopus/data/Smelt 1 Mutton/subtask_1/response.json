@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The next subtask is to place a furnace in order to smelt the mutton. The bot currently has 10 coal, 10 mutton, and 1 furnace in its inventory.",
+        "subtask": "\n1) Place a furnace",
+        "code": "async function smeltMutton(bot) {\n  // Subtask 1: Place a furnace\n  await bot.chat(\"Placing a furnace...\");\n  await placeItem(bot, \"furnace\", bot.entity.position);\n}\n",
+        "exec_code": "await smeltMutton(bot);"
+    }
+}

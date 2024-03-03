@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Craft 1 IronAxe",
+    "code": "// Main function\nasync function craftIronAxe(bot) {\n  // Subtask 1: Craft 1 IronAxe\n  await bot.chat(\"Crafting IronAxe...\");\n  await craftItem(bot, \"iron_axe\", 1);\n}\n\nawait craftIronAxe(bot);",
+    "error": "Execution Error:\nIn your program code: throw new Error(`No crafting table nearby`);\nNo crafting table nearby\nat line 5:await craftItem(bot, \"iron_axe\", 1); in your code\n",
+    "critic": "fail",
+    "reset": false,
+    "main_succeed": true
+}

@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The previous code successfully teleported the bot near the stone block in pic1. Now we need to mine 4 stone block.",
+        "subtask": "\n1) Mine 4 stone block.\n2) ...",
+        "code": "// Main function\nasync function mineStone(bot) {\n\t\n  // Subtask 2: Mine 4 stone block\n  await bot.chat(\"Mining stone...\");\n  await mineBlock(bot, \"stone\", 4); // To collect 4 stone\n}\n\n",
+        "exec_code": "await mineStone(bot);"
+    }
+}

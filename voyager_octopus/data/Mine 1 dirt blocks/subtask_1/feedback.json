@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Perceive and go near the dirt block\n2) Dig the dirt block",
+    "code": "async function mineDirtBlock(bot) {\n\t// Subtask 1: Perceive and go near the dirt block\n\tawait teleport(0, 1.22);\n}\n\nawait mineDirtBlock(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

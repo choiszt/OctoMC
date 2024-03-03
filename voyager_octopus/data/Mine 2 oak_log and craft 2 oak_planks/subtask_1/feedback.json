@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Teleport and approach the oak log at (10.12, 10.61) in pic1.\n2) Mine 2 oak logs.",
+    "code": "// Main function\nasync function mineOakLog(bot) {\n  // Subtask 1: Teleport and approach the oak log at (10.12, 10.61) in pic1.\n  await teleport(0, 10.12);\n}\n\n\nawait mineOakLog(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

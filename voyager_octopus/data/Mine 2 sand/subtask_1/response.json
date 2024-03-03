@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The task is to mine 2 sand blocks in Minecraft. We can find sand blocks in multiple locations. In pic1, there are sand blocks at distances 17.22 and 17.45. In pic2, there are sand blocks at distances 17.22 and 17.45 as well. In order to complete the task, we need to teleport to one of these locations and mine the sand blocks.",
+        "subtask": "\n1) Teleport near the sand block in pic1 or pic2.\n2) Mine 2 sand blocks.",
+        "code": "async function mineSand(bot) {\n  // Subtask 1: Teleport near the sand block in pic1 or pic2\n  await teleport(0.00, 17.22); // Teleport to the sand block at distance 17.22 in pic1\n}\n",
+        "exec_code": "await mineSand(bot);"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " Since we want to kill 2 cows, we need to find cows and attack them. We can perceive cows in the observed objects.",
+        "subtask": "\n1) Perceive and go near the cow.\n",
+        "code": "async function killCows(bot) {\n    // Subtask 1: Perceive and go near the cow\n    await bot.chat(\"Finding cows...\");\n    await teleport(0.00, 17.9); // Teleport to the location where the cow is\n}\n",
+        "exec_code": "await killCows(bot);"
+    }
+}

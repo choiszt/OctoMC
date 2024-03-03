@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The goal is to mine 2 dirt blocks in Minecraft. From the observed objects, I can see that there are dirt blocks in pic3 and pic4. The direction of pic3 is yaw=3.14 and the distance is 1.22,1.22. The direction of pic4 is yaw=4.71 and the distance is 1.22,1.22.",
+        "subtask": "\n1) Teleport and approach the dirt block in pic3.\n2) Mine the dirt block.\n3) ...",
+        "code": "async function mineDirt(bot) {\n   // Subtask 1: Teleport and approach the dirt block in pic3\n   await bot.chat(\"Approaching the dirt block...\");\n   await teleport(3.14, 1.22);  \n}\n",
+        "exec_code": "await mineDirt(bot);"
+    }
+}

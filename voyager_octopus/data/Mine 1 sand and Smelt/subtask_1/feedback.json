@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Perceive and go near the sand block.\n2) Mine the sand block.\n3) Smelt the sand.",
+    "code": "async function mineAndSmeltSand(bot) {\n  // Subtask 1: Perceive and go near the sand block\n  await bot.chat(\"Heading towards the sand block...\");\n  await teleport(0.00, 1.22);\n}\n\nawait mineAndSmeltSand(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Craft 4 oak planks",
+    "code": "// Main function\nasync function craftOakPlanks(bot) {\n  // Subtask 1: Craft 4 oak planks\n  await bot.chat(\"Crafting oak planks...\");\n  await craftItem(bot, \"oak_planks\", 4); // To craft 4 oak planks\n}\n\nawait craftOakPlanks(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

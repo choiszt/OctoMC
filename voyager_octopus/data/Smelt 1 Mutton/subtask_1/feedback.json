@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Place a furnace",
+    "code": "async function smeltMutton(bot) {\n  // Subtask 1: Place a furnace\n  await bot.chat(\"Placing a furnace...\");\n  await placeItem(bot, \"furnace\", bot.entity.position);\n}\n\nawait smeltMutton(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

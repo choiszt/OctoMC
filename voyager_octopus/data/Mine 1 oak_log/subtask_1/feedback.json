@@ -1,0 +1,8 @@
+{
+    "subtask": "\n1) Teleport to the location of oak_log in pic1.\n2) Mine the oak_log.",
+    "code": "async function mineOakLog(bot) {\n  // Subtask 1: Teleport to the location of oak_log in pic1\n  await teleport(0.00, 9.67);\n}\n\nawait mineOakLog(bot);",
+    "error": "Execution Error: No error\n",
+    "critic": "succeed",
+    "reset": false,
+    "main_succeed": false
+}

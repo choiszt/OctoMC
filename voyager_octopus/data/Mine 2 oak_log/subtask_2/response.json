@@ -1,0 +1,8 @@
+{
+    "response": {
+        "explain": " The next subtask is to mine 2 oak log.",
+        "subtask": "\n1) Mine 2 oak log.",
+        "code": "async function mineOakLog(bot) {\n  // Subtask 2: Mine 2 oak log\n  await bot.chat(\"Mining oak log...\");\n  await mineBlock(bot, \"oak_log\", 2);\n}\n",
+        "exec_code": "await mineOakLog(bot);"
+    }
+}
