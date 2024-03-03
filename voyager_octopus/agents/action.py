@@ -201,12 +201,18 @@ class OctopusAgent:
 
         for block_type, values in block_dict.items():
             if len(values) > 2:
-                values = sorted(values)[:2]
+                new_value=[]
+                for value in values:
+                    new_value.append(float(value))
+                values = sorted(new_value)[:2]
                 block_dict[block_type]=values
 
         formatted_blocks = []
         for block_type, values in block_dict.items():
-            formatted_values = ",".join(values)
+            string_value=[]
+            for value in values:
+                string_value.append(str(value))
+            formatted_values = ",".join(string_value)
             formatted_block = f"{block_type}({formatted_values})"
             formatted_blocks.append(formatted_block)
 
@@ -269,21 +275,24 @@ class OctopusAgent:
             if len(self.history_info['error'])==0 and len(error_messages)==0:
                 message += f"Execution Error: No error\n"  
             else:
-                message += f"Execution Error:\n{error}\n\n"
+                message += f"Execution Error:{error}\n"
             # if len(self.history_info['error']) > 0:
             #     message += f"Execution Error:{self.history_info['error']}\n"
             # else:
             #     message += f"Execution Error: No error\n"  
         elif len(self.history_info['code']) == 0: 
             message += f"Previous Action Code: No code\n"
-            message += f"Execution error: No error\n"
+            if self.history_info['error']:
+                message += f"Execution Error:{self.history_info['error']}\n"
+            else:
+                message += f"Execution error: No error\n"
 
-        # if inventory:
-        #     message += f"Inventory: {inventory}\n"
-        # else:
-        #     message += f"Inventory: Empty\n"
+        if inventory:
+            message += f"Inventory: {inventory}\n"
+        else:
+            message += f"Inventory: Empty\n"
         # message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should give me just one subtask each turn and can only use the functions provided above and pay attention to the response format."
-        message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn ."    
+        message += "Now, please output Explain, Subtasks (revise if necessary), Code that completing the next subtask, according to the instruction above. Remember you should pay attention to the response format and give me just one subtask each turn. Just give me one subtask at each turn"    
         return HumanMessage(content=message)
 
     def update_chest_memory(self, chests):

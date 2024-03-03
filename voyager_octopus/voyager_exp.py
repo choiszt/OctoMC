@@ -260,10 +260,12 @@ class Voyager:
                 try:
                     response = self.action_agent.gpt_request(system_message.content,human_message.content)
                     answer =  self.action_agent.process_ai_message(response)
-                    if len(answer['code'].split("Subtask"))>2: #more than one subtask
-                        self.action_agent.record_history(subtask=answer['subtask'], code=answer['code'],error='Your code has more than one Subtask')
-                        human_message = self.action_agent.render_human_message(current_data,task,critique=critique)
-                        continue
+                    if(subtask_iter==1): #just modified the code at the first round
+                        if len(answer['code'].split("Subtask"))>2: #more than one subtask
+                            # self.action_agent.record_history(subtask=answer['subtask'], code=answer['code'],error='Your code has more than one Subtask')
+                            self.action_agent.record_history('','',error='Your code has more than one Subtask')                        
+                            human_message = self.action_agent.render_human_message(current_data,task,critique=critique)
+                            continue
                     success = False
                     print(response)
                 except Exception as e:
@@ -278,6 +280,7 @@ class Voyager:
                     #     success = True
                     #     response = {"error_message": str(e)}
                     #     print(response)
+                gu.save_response(sub_save_path,answer)
             main_succeed = False
 
             # get feedback from simulator
@@ -315,7 +318,7 @@ class Voyager:
                         chest_observation=self.action_agent.render_chest_observation(),
                         max_retries=5,
                     )  
-                    gu.save_feedback(feedback_path, subtask, code, error, critic, reset, main_succeed)
+                    # gu.save_feedback(feedback_path, subtask, code, error, critic, reset, main_succeed)
                 else:
                     subtask = subtask
                     error = error_message
